@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
 set(BINARY_NAME "puzzzi")
-set(APPLICATION_ID "com.example.puzzzi")
+set(APPLICATION_ID "com.devsog12.puzzzi")
 
 cmake_policy(SET CMP0063 NEW)
 
