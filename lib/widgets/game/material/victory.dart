@@ -46,13 +46,21 @@ class _GameVictoryDialogState extends State<GameVictoryDialog> {
           FirebaseFirestore.instance
               .collection("leaderboard")
               .doc(FirebaseAuth.instance.currentUser!.uid)
-              .set({"point": point, "time_taken": time});
+              .set({
+            "point": point,
+            "time_taken": time,
+            "name": FirebaseAuth.instance.currentUser!.displayName
+          });
         }
       } else {
         FirebaseFirestore.instance
             .collection("leaderboard")
             .doc(FirebaseAuth.instance.currentUser!.uid)
-            .set({"point": point, "time_taken": time});
+            .set({
+          "point": point,
+          "time_taken": time,
+          "name": FirebaseAuth.instance.currentUser!.displayName
+        });
       }
     });
   }
