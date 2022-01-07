@@ -122,9 +122,18 @@ class GameMaterialPage extends StatelessWidget {
           body: SafeArea(
             child: Column(
               children: [
-                Text(
-                  "Howdy ${user!.displayName}",
-                  style: TextStyle(color: Colors.blue),
+                Row(
+                  children: [
+                    Text(
+                      "Howdy",
+                      style: TextStyle(color: Colors.blue, fontSize: 29),
+                    ),
+                    Text(
+                      "${user!.displayName}",
+                      style: TextStyle(
+                          color: Colors.lightBlueAccent, fontSize: 35),
+                    ),
+                  ],
                 ),
                 Row(
                   children: <Widget>[
@@ -247,7 +256,7 @@ class GameMaterialPage extends StatelessWidget {
               },
               customBorder: CircleBorder(),
               child: Icon(
-                Icons.refresh,
+                Icons.restore,
                 semanticLabel: "Reset",
               ),
             ),
@@ -284,7 +293,7 @@ class GameMaterialPage extends StatelessWidget {
               },
               customBorder: CircleBorder(),
               child: Icon(
-                Icons.more_vert,
+                Icons.settings,
                 semanticLabel: "Settings",
               ),
             ),
