@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:puzzzi/config/ui.dart';
 import 'package:puzzzi/widgets/game/board.dart';
 import 'package:puzzzi/widgets/game/material/control.dart';
+import 'package:puzzzi/widgets/game/material/leaderboard.dart';
 import 'package:puzzzi/widgets/game/material/sheets.dart';
 import 'package:puzzzi/widgets/game/material/steps.dart';
 import 'package:puzzzi/widgets/game/material/stopwatch.dart';
@@ -69,9 +70,18 @@ class GameMaterialPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  "Howdy ${user!.displayName}",
-                  style: TextStyle(color: Colors.blue),
+                Row(
+                  children: [
+                    Text(
+                      "Howdy",
+                      style: TextStyle(color: Colors.blue, fontSize: 29),
+                    ),
+                    Text(
+                      "${user!.displayName}",
+                      style: TextStyle(
+                          color: Colors.lightBlueAccent, fontSize: 35),
+                    ),
+                  ],
                 ),
                 isTallScreen
                     ? Container(
@@ -160,6 +170,20 @@ class GameMaterialPage extends StatelessWidget {
         );
       }
     });
+  }
+
+  Widget _ilead(final BuildContext context) {
+    return IconButton(
+        onPressed: () => showDialog(
+            context: context,
+            builder: (_) {
+              return Builder(
+                builder: (_) {
+                  return LeaderBoard();
+                },
+              );
+            }),
+        icon: Icon(Icons.leaderboard));
   }
 
   Widget _buildBoard(final BuildContext context) {
@@ -299,6 +323,7 @@ class GameMaterialPage extends StatelessWidget {
             ),
           ),
         ),
+        _ilead(context)
       ],
     );
   }
