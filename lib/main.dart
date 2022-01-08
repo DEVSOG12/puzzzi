@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:puzzzi/widgets/login_page.dart';
 import 'package:puzzzi/widgets/signup.dart';
 // import 'package:in_app_purchase/in_app_purchase.dart';
 
@@ -20,10 +21,8 @@ void main() async {
   _setTargetPlatformForDesktop();
 
   runApp(
-  
-       ConfigUiContainer(
-        child: MyApp(),
-      
+    ConfigUiContainer(
+      child: MyApp(),
     ),
   );
 }

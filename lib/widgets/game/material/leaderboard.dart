@@ -20,17 +20,24 @@ class _LeaderBoardState extends State<LeaderBoard> {
               FirebaseFirestore.instance.collection("leaderboard").snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              log(snapshot.data.toString());
+              QuerySnapshot querySnapshot = snapshot.data as QuerySnapshot;
+              // log(querySnapshot.docs[]);
 
-              Text("DATA DEY");
-              // return ListView.builder(
-
-              // itemCount: snapshot.data,
-              // itemBuilder: itemBuilder)
+              // Text("DATA DEY");
+              return ListView.builder(
+                  itemCount: querySnapshot.docs.length,
+                  itemBuilder: (_, i) {
+                    DocumentSnapshot documentSnapshot =
+                        querySnapshot.docs[i].data() as DocumentSnapshot;
+                    return ListTile(
+                      leading: Text(documentSnapshot["name"]),
+                      subtitle: Text(documentSnapshot["point"]),
+                    );
+                  });
             } else {
               return CircularProgressIndicator();
             }
-            return CircularProgressIndicator();
+            // return CircularProgressIndicator();
           },
         ),
       ),

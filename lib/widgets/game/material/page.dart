@@ -76,7 +76,7 @@ class GameMaterialPage extends StatelessWidget {
                       "Howdy",
                       style: TextStyle(color: Colors.blue, fontSize: 29),
                     ),
-                    Text(
+                    Text( 
                       "${user!.displayName}",
                       style: TextStyle(
                           color: Colors.lightBlueAccent, fontSize: 35),

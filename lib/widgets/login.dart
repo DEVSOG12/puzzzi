@@ -1,183 +1,375 @@
+import 'dart:async';
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:puzzzi/widgets/auth.dart';
-import 'package:puzzzi/widgets/constants.dart';
 import 'package:puzzzi/widgets/game/page.dart';
 import 'package:puzzzi/widgets/signup.dart';
 
-class LogIn extends StatefulWidget {
+class Login extends StatefulWidget {
   @override
-  _LogInState createState() => _LogInState();
+  _LoginState createState() => _LoginState();
 }
 
-class _LogInState extends State<LogIn> {
-  final emailcontroller = TextEditingController();
-  final passwordcontroller = TextEditingController();
+class _LoginState extends State<Login> with TickerProviderStateMixin {
   bool isloading = false;
+
+  late AnimationController controller1;
+  late AnimationController controller2;
+  late Animation<double> animation1;
+  late Animation<double> animation2;
+  late Animation<double> animation3;
+  late Animation<double> animation4;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller1 = AnimationController(
+      vsync: this,
+      duration: const Duration(
+        seconds: 5,
+      ),
+    );
+    animation1 = Tween<double>(begin: .1, end: .15).animate(
+      CurvedAnimation(
+        parent: controller1,
+        curve: Curves.easeInOut,
+      ),
+    )
+      ..addListener(() {
+        setState(() {});
+      })
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          controller1.reverse();
+        } else if (status == AnimationStatus.dismissed) {
+          controller1.forward();
+        }
+      });
+    animation2 = Tween<double>(begin: .02, end: .04).animate(
+      CurvedAnimation(
+        parent: controller1,
+        curve: Curves.easeInOut,
+      ),
+    )..addListener(() {
+        setState(() {});
+      });
+
+    controller2 = AnimationController(
+      vsync: this,
+      duration: const Duration(
+        seconds: 5,
+      ),
+    );
+    animation3 = Tween<double>(begin: .41, end: .38).animate(CurvedAnimation(
+      parent: controller2,
+      curve: Curves.easeInOut,
+    ))
+      ..addListener(() {
+        setState(() {});
+      })
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          controller2.reverse();
+        } else if (status == AnimationStatus.dismissed) {
+          controller2.forward();
+        }
+      });
+    animation4 = Tween<double>(begin: 170, end: 190).animate(
+      CurvedAnimation(
+        parent: controller2,
+        curve: Curves.easeInOut,
+      ),
+    )..addListener(() {
+        setState(() {});
+      });
+
+    Timer(const Duration(milliseconds: 2500), () {
+      controller1.forward();
+    });
+
+    controller2.forward();
+  }
+
+  @override
+  void dispose() {
+    controller1.dispose();
+    controller2.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    // final username = TextEditingController();
+    final emailcontroller = TextEditingController();
+
+    final passwordcontroller = TextEditingController();
+
     Size size = MediaQuery.of(context).size;
-
-    return Padding(
-      padding: EdgeInsets.all(size.height > 770
-          ? 64
-          : size.height > 670
-              ? 32
-              : 16),
-      child: Center(
-        child: Card(
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(25),
-            ),
-          ),
-          child: AnimatedContainer(
-            duration: Duration(milliseconds: 200),
-            height: size.height *
-                (size.height > 770
-                    ? 0.7
-                    : size.height > 670
-                        ? 0.8
-                        : 0.9),
-            width: 500,
-            color: Colors.white,
-            child: Center(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.all(40),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "LOG IN",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey[700],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Container(
-                        width: 30,
-                        child: Divider(
-                          color: kPrimaryColor,
-                          thickness: 2,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 32,
-                      ),
-                      TextField(
-                        controller: emailcontroller,
-                        decoration: InputDecoration(
-                          hintText: 'Email',
-                          labelText: 'Email',
-                          suffixIcon: Icon(
-                            Icons.mail_outline,
+    return Scaffold(
+      backgroundColor: const Color(0xff192028),
+      body: ScrollConfiguration(
+        behavior: MyBehavior(),
+        child: SingleChildScrollView(
+          child: SizedBox(
+            height: size.height,
+            child: Stack(
+              children: [
+                Positioned(
+                  top: size.height * (animation2.value + .58),
+                  left: size.width * .21,
+                  child: CustomPaint(
+                    painter: MyPainter(50),
+                  ),
+                ),
+                Positioned(
+                  top: size.height * .98,
+                  left: size.width * .1,
+                  child: CustomPaint(
+                    painter: MyPainter(animation4.value - 30),
+                  ),
+                ),
+                Positioned(
+                  top: size.height * .5,
+                  left: size.width * (animation2.value + .8),
+                  child: CustomPaint(
+                    painter: MyPainter(30),
+                  ),
+                ),
+                Positioned(
+                  top: size.height * animation3.value,
+                  left: size.width * (animation1.value + .1),
+                  child: CustomPaint(
+                    painter: MyPainter(60),
+                  ),
+                ),
+                Positioned(
+                  top: size.height * .1,
+                  left: size.width * .8,
+                  child: CustomPaint(
+                    painter: MyPainter(animation4.value),
+                  ),
+                ),
+                Column(
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: Padding(
+                        padding: EdgeInsets.only(top: size.height * .1),
+                        child: Text(
+                          'PUZZZI',
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(.7),
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1,
+                            wordSpacing: 4,
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 32,
-                      ),
-                      TextField(
-                        controller: passwordcontroller,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          hintText: 'Password',
-                          labelText: 'Password',
-                          suffixIcon: Icon(
-                            Icons.lock_outline,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 64,
-                      ),
-                      InkWell(
-                        child: isloading
-                            ? Center(child: CircularProgressIndicator())
-                            : actionButton("Log In"),
-
-                        // child: actionButton("Log In"),
-                        onTap: () async {
-                          setState(() {
-                            isloading = true;
-                          });
-                          UserCredential? user = await AuthService().login(
-                              email: emailcontroller.text,
-                              password: passwordcontroller.text);
-
-                          if (user != null) {
-                            setState(() {
-                              isloading = false;
-                            });
-                            log(user.toString());
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (_) => GamePage()));
-                          }
-                          if (user == null) {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(SnackBar(content: Text("Error")));
-                            log("Error");
-                          }
-                        },
-                      ),
-                      SizedBox(
-                        height: 32,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                    ),
+                    Expanded(
+                      flex: 7,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text(
-                            "You do not have an account?",
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 14,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (_) => SignUp()));
-                            },
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Sign Up",
-                                  style: TextStyle(
-                                    color: kPrimaryColor,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 8,
-                                ),
-                                Icon(
-                                  Icons.arrow_forward,
-                                  color: kPrimaryColor,
-                                ),
-                              ],
-                            ),
+                          // component1(Icons.account_circle_outlined,
+                          //     'User name...', false, false, username),
+                          component1(Icons.email_outlined, 'Email...', false,
+                              true, emailcontroller),
+                          component1(Icons.lock_outline, 'Password...', true,
+                              false, passwordcontroller),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              component2(
+                                'LOGIN',
+                                2.58,
+                                () async {
+                                  HapticFeedback.lightImpact();
+                                  setState(() {
+                                    isloading = true;
+                                  });
+                                  UserCredential? user = await AuthService()
+                                      .login(
+                                          email: emailcontroller.text,
+                                          password: passwordcontroller.text);
+
+                                  if (user != null) {
+                                    setState(() {
+                                      isloading = false;
+                                    });
+                                    log(user.toString());
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => GamePage()));
+                                  }
+                                  if (user == null) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(content: Text("Error")));
+                                    log("Error");
+                                  }
+                                },
+                              ),
+                              SizedBox(width: size.width / 20),
+                              component2(
+                                'Forgotten password!',
+                                2.58,
+                                () {
+                                  HapticFeedback.lightImpact();
+                                  Fluttertoast.showToast(
+                                      msg: 'Forgotten password button pressed');
+                                },
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                    Expanded(
+                      flex: 6,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          isloading
+                              ? const Center(child: CircularProgressIndicator())
+                              : component2(
+                                  'Create a new Account',
+                                  2,
+                                  () {
+                                    HapticFeedback.lightImpact();
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => SignUp()));
+                                  },
+                                ),
+                          SizedBox(height: size.height * .05),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ),
+              ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Widget component1(IconData icon, String hintText, bool isPassword,
+      bool isEmail, TextEditingController controller) {
+        
+    Size size = MediaQuery.of(context).size;
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(15),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(
+          sigmaY: 15,
+          sigmaX: 15,
+        ),
+        child: Container(
+          height: size.height / 8,
+          width: size.width / 1.2,
+          alignment: Alignment.center,
+          padding: EdgeInsets.only(right: size.width / 30),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(.05),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: TextFormField(
+            controller: controller,
+            // onChanged: (text) {
+            //   log(text);
+            // },
+            style: TextStyle(color: Colors.white.withOpacity(.8)),
+            cursorColor: Colors.white,
+            obscureText: isPassword,
+            keyboardType:
+                isEmail ? TextInputType.emailAddress : TextInputType.text,
+            decoration: InputDecoration(
+              prefixIcon: Icon(
+                icon,
+                color: Colors.white.withOpacity(.7),
+              ),
+              border: InputBorder.none,
+              // hintMaxLines:21,
+              hintText: hintText,
+              hintStyle:
+                  TextStyle(fontSize: 14, color: Colors.white.withOpacity(.5)),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget component2(String string, double width, VoidCallback voidCallback) {
+    Size size = MediaQuery.of(context).size;
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(15),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaY: 15, sigmaX: 15),
+        child: InkWell(
+          highlightColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          onTap: voidCallback,
+          child: Container(
+            height: size.height / 8,
+            width: size.width / width,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(.05),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Text(
+              string,
+              style: TextStyle(color: Colors.white.withOpacity(.8)),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class MyPainter extends CustomPainter {
+  final double radius;
+
+  MyPainter(this.radius);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..shader = const LinearGradient(
+              colors: [const Color(0xffFD5E3D), const Color(0xffC43990)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight)
+          .createShader(Rect.fromCircle(
+        center: const Offset(0, 0),
+        radius: radius,
+      ));
+
+    canvas.drawCircle(Offset.zero, radius, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
   }
 }
