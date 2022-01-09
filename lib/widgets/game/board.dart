@@ -34,6 +34,8 @@ class BoardWidget extends StatefulWidget {
 class _BoardWidgetState extends State<BoardWidget>
     with TickerProviderStateMixin {
   static const _ANIM_COLOR_OVERLAY_TAG = "color_overlay";
+  int? mich = Random().nextInt(2);
+
   static const _ANIM_COLOR_BACKGROUND_TAG = "color_background";
   static const _ANIM_MOVE_TAG = "move";
   static const _ANIM_SCALE_TAG = "scale";
@@ -56,7 +58,8 @@ class _BoardWidgetState extends State<BoardWidget>
     return friction * 61774.04968;
   }
 
-  static double _flingDuration({double friction: _kFriction, required double velocity}) {
+  static double _flingDuration(
+      {double friction: _kFriction, required double velocity}) {
     // See mPhysicalCoeff
     final double scaledFriction = friction * _decelerationForFriction(0.84);
 
@@ -66,7 +69,8 @@ class _BoardWidgetState extends State<BoardWidget>
     return exp(deceleration / (_kDecelerationRate - 1.0));
   }
 
-  static double _flingOffset({double friction: _kFriction, required double velocity}) {
+  static double _flingOffset(
+      {double friction: _kFriction, required double velocity}) {
     var _duration = _flingDuration(friction: friction, velocity: velocity);
     return velocity * _duration / _initialVelocityPenetration;
   }
@@ -145,8 +149,8 @@ class _BoardWidgetState extends State<BoardWidget>
                 enableColorAnimation: false);
 
             // Change the color of the chip.
-            final color =
-                HSLColor.fromAHSL(1, hueStep * chip.number!, 0.7, 0.5).toColor();
+            final color = HSLColor.fromAHSL(1, hueStep * chip.number!, 0.7, 0.5)
+                .toColor();
             _startColorBackgroundAnimation(
               chip,
               from: extra.backgroundColor,
@@ -520,6 +524,7 @@ class _BoardWidgetState extends State<BoardWidget>
         chipSize / 3,
         size: widget.size,
         boardsize: board.size,
+        mich: mich!,
         onPressed: widget.onTap != null && !_isSpeedRunModeEnabled!
             ? () {
                 widget.onTap!(chip.currentPoint);
