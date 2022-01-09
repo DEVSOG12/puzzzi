@@ -31,7 +31,7 @@ class ChipWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int? mich;
-    mich ?? Random().nextInt(2);
+    mich == null ? mich = Random().nextInt(2) : mich = mich;
 
     final isCompact = size < 150;
     List images3x3 = [9, 8, 7, 6, 5, 4, 3, 2, 1];
