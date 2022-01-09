@@ -28,12 +28,12 @@ class _SignUpPageState extends State<SignUpPage> {
         Navigator.pop(context);
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Row(
           children: <Widget>[
             Container(
-              padding: EdgeInsets.only(left: 0, top: 20, bottom: 10),
-              child: Icon(Icons.keyboard_arrow_left, color: Colors.white),
+              padding: const EdgeInsets.only(left: 0, top: 20, bottom: 10),
+              child: const Icon(Icons.keyboard_arrow_left, color: Colors.white),
             ),
           ],
         ),
@@ -44,16 +44,16 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _nameWidget() {
     return Stack(
       children: [
-        Container(
+        SizedBox(
           width: MediaQuery.of(context).size.width / 2,
           child: TextFormField(
             keyboardType: TextInputType.name,
             textInputAction: TextInputAction.next,
             controller: username,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               // hintText: 'Enter your full name',
               labelText: 'Name',
-              labelStyle: TextStyle(
+              labelStyle:  TextStyle(
                   color: Color.fromRGBO(226, 222, 211, 1),
                   fontWeight: FontWeight.w500,
                   fontSize: 13),
@@ -72,13 +72,13 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _emailWidget() {
     return Stack(
       children: [
-        Container(
+        SizedBox(
           width: MediaQuery.of(context).size.width / 2,
           child: TextFormField(
             controller: emailcontroller,
             keyboardType: TextInputType.name,
             textInputAction: TextInputAction.next,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               // hintText: 'Enter your full name',
               labelText: 'Email',
               labelStyle: TextStyle(
@@ -100,14 +100,14 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _passwordWidget() {
     return Stack(
       children: [
-        Container(
+        SizedBox(
           width: MediaQuery.of(context).size.width / 2,
           child: TextFormField(
             controller: passwordcontroller,
             obscureText: true,
             keyboardType: TextInputType.name,
             textInputAction: TextInputAction.next,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Password',
               labelStyle: TextStyle(
                   color: Color.fromRGBO(226, 222, 211, 1),
@@ -125,42 +125,42 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  String getMessageFromErrorCode(error) {
-    switch (error) {
-      case "ERROR_EMAIL_ALREADY_IN_USE":
-      case "account-exists-with-different-credential":
-      case "email-already-in-use":
-        return "Email already used. Go to login page.";
-        break;
-      case "ERROR_WRONG_PASSWORD":
-      case "wrong-password":
-        return "Wrong email/password combination.";
-        break;
-      case "ERROR_USER_NOT_FOUND":
-      case "user-not-found":
-        return "No user found with this email.";
-        break;
-      case "ERROR_USER_DISABLED":
-      case "user-disabled":
-        return "User disabled.";
-        break;
-      case "ERROR_TOO_MANY_REQUESTS":
-      case "operation-not-allowed":
-        return "Too many requests to log into this account.";
-        break;
-      case "ERROR_OPERATION_NOT_ALLOWED":
-      case "operation-not-allowed":
-        return "Server error, please try again later.";
-        break;
-      case "ERROR_INVALID_EMAIL":
-      case "invalid-email":
-        return "Email address is invalid.";
-        break;
-      default:
-        return "Login failed. Please try again.";
-        break;
-    }
-  }
+  // String getMessageFromErrorCode(error) {
+  //   switch (error) {
+  //     case "ERROR_EMAIL_ALREADY_IN_USE":
+  //     case "account-exists-with-different-credential":
+  //     case "email-already-in-use":
+  //       return "Email already used. Go to login page.";
+  //       break;
+  //     case "ERROR_WRONG_PASSWORD":
+  //     case "wrong-password":
+  //       return "Wrong email/password combination.";
+  //       break;
+  //     case "ERROR_USER_NOT_FOUND":
+  //     case "user-not-found":
+  //       return "No user found with this email.";
+  //       break;
+  //     case "ERROR_USER_DISABLED":
+  //     case "user-disabled":
+  //       return "User disabled.";
+  //       break;
+  //     case "ERROR_TOO_MANY_REQUESTS":
+  //     case "operation-not-allowed":
+  //       return "Too many requests to log into this account.";
+  //       break;
+  //     case "ERROR_OPERATION_NOT_ALLOWED":
+  //     case "operation-not-allowed":
+  //       return "Server error, please try again later.";
+  //       break;
+  //     case "ERROR_INVALID_EMAIL":
+  //     case "invalid-email":
+  //       return "Email address is invalid.";
+  //       break;
+  //     default:
+  //       return "Login failed. Please try again.";
+  //       break;
+  //   }
+  // }
 
   Widget _submitButton() {
     return Align(
@@ -184,7 +184,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
               log(user.toString());
               Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => GamePage()));
+                  context, MaterialPageRoute(builder: (_) => const GamePage()));
             }
           }
           if (user! is! UserCredential) {
@@ -198,7 +198,7 @@ class _SignUpPageState extends State<SignUpPage> {
         },
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text(
+          const Text(
             '',
             style: TextStyle(
                 color: Colors.white,
@@ -207,13 +207,13 @@ class _SignUpPageState extends State<SignUpPage> {
                 height: 1.6),
           ),
           SizedBox.fromSize(
-            size: Size.square(70.0), // button width and height
+            size: const Size.square(70.0), // button width and height
             child: ClipOval(
               child: Material(
-                color: Color.fromRGBO(76, 81, 93, 1),
+                color: const Color.fromRGBO(76, 81, 93, 1),
                 child: isloading
-                    ? CircularProgressIndicator()
-                    : Icon(Icons.arrow_forward,
+                    ? const CircularProgressIndicator()
+                    : const Icon(Icons.arrow_forward,
                         color: Colors.white), // button color
               ),
             ),
@@ -225,12 +225,12 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _createLoginLabel() {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 20),
+      margin: const EdgeInsets.symmetric(vertical: 20),
       alignment: Alignment.bottomLeft,
       child: InkWell(
         onTap: () => Navigator.push(
-            context, MaterialPageRoute(builder: (context) => SignInPage())),
-        child: Text(
+            context, MaterialPageRoute(builder: (context) => const SignInPage())),
+        child: const Text(
           'Login',
           style: TextStyle(
             fontSize: 14,
@@ -254,21 +254,21 @@ class _SignUpPageState extends State<SignUpPage> {
           children: [
             Positioned(
                 height: MediaQuery.of(context).size.height * 1,
-                child: SignUpContainer()),
+                child: const SignUpContainer()),
             SingleChildScrollView(
               child: Column(
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
                       children: [
                         SizedBox(height: height * .4),
                         _nameWidget(),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         _emailWidget(),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         _passwordWidget(),
-                        SizedBox(height: 80),
+                        const SizedBox(height: 80),
                         _submitButton(),
                         SizedBox(height: height * .050),
                         _createLoginLabel(),

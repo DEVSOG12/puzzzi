@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:puzzzi/data/board.dart';
 import 'package:puzzzi/data/chip.dart';
 import 'package:puzzzi/domain/starting_positions.dart';
-import 'package:meta/meta.dart';
+// import 'package:meta/meta.dart';
 
 abstract class Game {
   static Game instance = _GameImpl();
@@ -16,8 +16,7 @@ abstract class Game {
 
   Board? tap(Board? board, {required Point<int> point});
 
-  Point<int> findChipPositionAfterTap(Board board,
-      {required Point<int> point});
+  Point<int> findChipPositionAfterTap(Board board, {required Point<int> point});
 
   /// Returns the chips that are free to move,
   /// including a chip at the point.
@@ -83,10 +82,10 @@ class _GameImpl implements Game {
       });
     });
 
-    board.chips.forEach((chip) {
+    for (var chip in board.chips) {
       final pos = chip.currentPoint;
       matrix[pos.x][pos.y] = chip;
-    });
+    }
 
     // Perform the shuffling
     var blankX = board.blank.x;
@@ -109,7 +108,7 @@ class _GameImpl implements Game {
           break;
         default:
           throw StateError("You have choosen an uknown direction.");
-          break;
+        // break;
       }
 
       if (x < 0 || x >= board.size || y < 0 || y >= board.size) {
@@ -159,7 +158,8 @@ class _GameImpl implements Game {
   }
 
   @override
-  Point<int> findChipPositionAfterTap(Board board, {required Point<int> point}) {
+  Point<int> findChipPositionAfterTap(Board board,
+      {required Point<int> point}) {
     int dx;
     int dy;
     if (point.x == board.blank.x) {
@@ -210,7 +210,7 @@ class _GameImpl implements Game {
         return y == board.blank.y && x >= start && x <= end;
       });
     } else {
-      return Iterable.empty();
+      return const Iterable.empty();
     }
   }
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'dart:developer';
 import 'dart:ui';
 
@@ -101,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       body: SingleChildScrollView(
-        child: Container(
+        child: SizedBox(
           height: size.height,
           child: Column(
             children: [
@@ -153,7 +155,7 @@ class _LoginPageState extends State<LoginPage> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (_) => GamePage()));
+                                        builder: (_) => const GamePage()));
                               }
                               if (user == null) {
                                 // setState(() {
@@ -161,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                                 // });
                                 log("Error");
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text("Error")));
+                                    const SnackBar(content:  Text("Error")));
                               }
                             },
                           ),
@@ -188,7 +190,7 @@ class _LoginPageState extends State<LoginPage> {
                         () {
                           HapticFeedback.lightImpact();
                           Navigator.push(context,
-                              MaterialPageRoute(builder: (_) => Login()));
+                              MaterialPageRoute(builder: (_) => const Login()));
                         },
                       ),
                       SizedBox(height: size.height * .05),

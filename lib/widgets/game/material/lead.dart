@@ -1,14 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:puzzzi/data/result.dart';
-import 'package:puzzzi/links.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:puzzzi/play_games.dart';
-import 'package:puzzzi/widgets/game/format.dart';
 import 'package:flutter/material.dart';
 import 'package:puzzzi/widgets/game/material/leaderboard.dart';
-import 'package:share/share.dart';
 
 class Lead extends StatefulWidget {
+  const Lead({Key? key}) : super(key: key);
+
   @override
   State<Lead> createState() => _LeadState();
 }
@@ -22,8 +19,8 @@ class _LeadState extends State<Lead> {
   @override
   Widget build(BuildContext context) {
     final actions = <Widget>[
-      new FlatButton(
-        child: new Text("Close"),
+      TextButton(
+        child: const Text("Close"),
         onPressed: () {
           Navigator.of(context).pop();
         },
@@ -41,7 +38,7 @@ class _LeadState extends State<Lead> {
           // Column(
           // mainAxisSize: MainAxisSize.min,
           // children: <Widget>[
-          LeaderBoard(),
+          const LeaderBoard(),
       // ],
       // ),
       actions: actions,

@@ -1,12 +1,14 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:puzzzi/config/ui.dart';
 // import 'package:puzzzi/play_games.dart';
 import 'package:puzzzi/utils/platform.dart';
-import 'package:puzzzi/widgets/LoginP.dart';
+// import 'package:puzzzi/widgets/LoginP.dart';
 import 'package:puzzzi/widgets/game/page.dart';
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,7 +26,7 @@ void main() async {
   _setTargetPlatformForDesktop();
 
   runApp(
-    ConfigUiContainer(
+    const ConfigUiContainer(
       child: MyApp(),
     ),
   );
@@ -46,10 +48,12 @@ void _setTargetPlatformForDesktop() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     const title = 'Puzzzi';
-    return _MyMaterialApp(title: title);
+    return const _MyMaterialApp(title: title);
   }
 }
 
@@ -58,15 +62,16 @@ class MyApp extends StatelessWidget {
 abstract class _MyPlatformApp extends StatelessWidget {
   final String title;
 
-  _MyPlatformApp({required this.title});
+  const _MyPlatformApp({required this.title});
 }
 
 class _MyMaterialApp extends _MyPlatformApp {
-  _MyMaterialApp({required String title}) : super(title: title);
-  bool? islogged;
+  const _MyMaterialApp({required String title}) : super(title: title);
 
   @override
   Widget build(BuildContext context) {
+    bool? islogged;
+
     final subscription = FirebaseAuth.instance.idTokenChanges().listen(null);
     subscription.onData((event) async {
       if (event != null) {
@@ -79,7 +84,6 @@ class _MyMaterialApp extends _MyPlatformApp {
 
     ThemeData applyDecor(ThemeData theme) => theme.copyWith(
           primaryColor: Colors.blue,
-          accentColor: Colors.lightBlue,
           accentIconTheme: theme.iconTheme.copyWith(color: Colors.black),
           dialogTheme: const DialogTheme(
             shape: RoundedRectangleBorder(
@@ -91,13 +95,15 @@ class _MyMaterialApp extends _MyPlatformApp {
               theme.primaryTextTheme.apply(fontFamily: 'Inconsolata'),
           accentTextTheme:
               theme.accentTextTheme.apply(fontFamily: 'Inconsolata'),
+          colorScheme:
+              ColorScheme.fromSwatch().copyWith(secondary: Colors.lightBlue),
         );
 
     final baseDarkTheme = applyDecor(ThemeData(
       brightness: Brightness.dark,
-      canvasColor: Color(0xFF121212),
-      backgroundColor: Color(0xFF121212),
-      cardColor: Color(0xFF1E1E1E),
+      canvasColor: const Color(0xFF121212),
+      backgroundColor: const Color(0xFF121212),
+      cardColor: const Color(0xFF1E1E1E),
     ));
     final baseLightTheme = applyDecor(ThemeData.light());
 
@@ -140,10 +146,10 @@ class _MyMaterialApp extends _MyPlatformApp {
           );
 
           return islogged == null
-              ? SignUpPage()
+              ? const SignUpPage()
               : islogged!
-                  ? GamePage()
-                  : SignInPage();
+                  ? const GamePage()
+                  : const SignInPage();
           // return GamePage();
         },
       ),
@@ -151,13 +157,13 @@ class _MyMaterialApp extends _MyPlatformApp {
   }
 }
 
-class _MyCupertinoApp extends _MyPlatformApp {
-  _MyCupertinoApp({required String title}) : super(title: title);
+// class _MyCupertinoApp extends _MyPlatformApp {
+//   _MyCupertinoApp({required String title}) : super(title: title);
 
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoApp(
-      title: title,
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return CupertinoApp(
+//       title: title,
+//     );
+//   }
+// }

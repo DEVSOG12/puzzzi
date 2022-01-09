@@ -12,10 +12,11 @@ class GameVictoryDialog extends StatefulWidget {
 
   final String Function(int) timeFormatter;
 
-  GameVictoryDialog({
+  const GameVictoryDialog({
+    Key? key,
     required this.result,
-    this.timeFormatter: formatElapsedTime,
-  });
+    this.timeFormatter = formatElapsedTime,
+  }) : super(key: key);
 
   @override
   State<GameVictoryDialog> createState() => _GameVictoryDialogState();
@@ -26,8 +27,7 @@ class _GameVictoryDialogState extends State<GameVictoryDialog> {
   void initState() {
     final timeFormatted = widget.timeFormatter(widget.result.time);
 
-    var point =
-        (widget.result.size ^ 2) * (1 / int.parse(timeFormatted[0])) + 300;
+    var point = (widget.result.size ^ 2) * ((1 / widget.result.time) + 300);
 
     addpoints(int.parse(point.toString()), timeFormatted);
 
@@ -71,16 +71,16 @@ class _GameVictoryDialogState extends State<GameVictoryDialog> {
             (1 / int.parse(timeFormatted.substring(0, 1))) +
         300;
     final actions = <Widget>[
-      new FlatButton(
-        child: new Text("Share"),
+      TextButton(
+        child: const Text("Share"),
         onPressed: () {
           Share.share("I have solved the Puzzzi's "
               "${widget.result.size}x${widget.result.size} puzzle in $timeFormatted "
               "with just ${widget.result.steps} steps! Check it out: $URL_REPOSITORY");
         },
       ),
-      new FlatButton(
-        child: new Text("Close"),
+      TextButton(
+        child: const Text("Close"),
         onPressed: () {
           Navigator.of(context).pop();
         },
@@ -90,7 +90,7 @@ class _GameVictoryDialogState extends State<GameVictoryDialog> {
     // if (PlayGamesContainer.of(context).isSupported!) {
     //   actions.insert(
     //     0,
-    //     new FlatButton(
+    //     new TextButton(
     //       child: new Text("Leaderboard"),
     //       onPressed: () {
     //         final playGames = PlayGamesContainer.of(context);
@@ -114,7 +114,7 @@ class _GameVictoryDialogState extends State<GameVictoryDialog> {
         children: <Widget>[
           Text(
             "Points: $point",
-            style: TextStyle(fontSize: 30, color: Colors.blue),
+            style: const TextStyle(fontSize: 30, color: Colors.blue),
           ),
           Text(
               "You've successfuly completed the ${widget.result.size}x${widget.result.size} puzzle"),

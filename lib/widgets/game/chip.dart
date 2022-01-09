@@ -1,5 +1,5 @@
 import 'dart:developer';
-import 'dart:math' hide log;
+// import 'dart:math' hide log;
 
 import 'package:flutter/material.dart' hide Chip;
 
@@ -21,16 +21,16 @@ class ChipWidget extends StatelessWidget {
 
   final double size;
 
-  ChipWidget(
+  const ChipWidget(
     this.text,
     this.overlayColor,
     this.backgroundColor,
-    this.fontSize, {
+    this.fontSize, {Key? key, 
     required this.onPressed,
     required this.size,
     required this.mich,
     required this.boardsize,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -69,12 +69,15 @@ class ChipWidget extends StatelessWidget {
 // @formatter:on
 
     String? assets() {
-      if (boardsize == 3)
+      if (boardsize == 3) {
         return "assets/${(mich + 1).toString()}/3x3/${images3x3[(int.parse(text!) - 1)]}.png";
-      if (boardsize == 4)
+      }
+      if (boardsize == 4) {
         return "assets/${(mich + 1).toString()}/4x4/${images4x4[(int.parse(text!) - 1)]}.png";
-      if (boardsize == 5)
+      }
+      if (boardsize == 5) {
         return "assets/${(mich + 1).toString()}/5x5/${images5x5[(int.parse(text!) - 1)]}.png";
+      }
     }
 
     final shape = RoundedRectangleBorder(
@@ -105,11 +108,10 @@ class ChipWidget extends StatelessWidget {
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: fontSize,
-                          color: 
-// color.toString() == "Color(0xff1e1e1e)" ||
-                                  // color.toString() == "Color(0x0026d9d9)"
-                             // ? Colors.white
-                              color),
+                          color: color.toString() == "Color(0xff1e1e1e)" ||
+                                  color.toString() == "Color(0x0026d9d9)"
+                              ? Colors.black87
+                              : color),
                     )),
                     height: 190.0,
                     width: MediaQuery.of(context).size.width - 100.0,
@@ -117,7 +119,7 @@ class ChipWidget extends StatelessWidget {
                         borderRadius: BorderRadius.circular(5),
                         color: Colors.blue,
                         image: DecorationImage(
-                            image: new AssetImage(assets()!),
+                            image: AssetImage(assets()!),
                             fit: BoxFit.fill)),
                   )
                 : null,

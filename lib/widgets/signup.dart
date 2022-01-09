@@ -11,6 +11,8 @@ import 'package:puzzzi/widgets/game/page.dart';
 import 'package:puzzzi/widgets/login.dart';
 
 class SignUp extends StatefulWidget {
+  const SignUp({Key? key}) : super(key: key);
+
   @override
   _SignUpState createState() => _SignUpState();
 }
@@ -30,7 +32,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
 
     controller1 = AnimationController(
       vsync: this,
-      duration: Duration(
+      duration: const Duration(
         seconds: 5,
       ),
     );
@@ -61,7 +63,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
 
     controller2 = AnimationController(
       vsync: this,
-      duration: Duration(
+      duration: const Duration(
         seconds: 5,
       ),
     );
@@ -88,7 +90,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
         setState(() {});
       });
 
-    Timer(Duration(milliseconds: 2500), () {
+    Timer(const Duration(milliseconds: 2500), () {
       controller1.forward();
     });
 
@@ -111,7 +113,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
 
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Color(0xff192028),
+      backgroundColor: const Color(0xff192028),
       body: ScrollConfiguration(
         behavior: MyBehavior(),
         child: SingleChildScrollView(
@@ -208,7 +210,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (_) => GamePage()));
+                                            builder: (_) => const GamePage()));
                                   }
                                   if (user == null) {
                                     // setState(() {
@@ -216,7 +218,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
                                     // });
                                     log("Error");
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text("Error")));
+                                        const SnackBar(content: Text("Error")));
                                   }
                                 },
                               ),
@@ -246,7 +248,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
                             () {
                               HapticFeedback.lightImpact();
                               Navigator.push(context,
-                                  MaterialPageRoute(builder: (_) => Login()));
+                                  MaterialPageRoute(builder: (_) => const Login()));
                             },
                           ),
                           SizedBox(height: size.height * .05),
@@ -343,12 +345,12 @@ class MyPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..shader = LinearGradient(
+      ..shader = const LinearGradient(
               colors: [Color(0xffFD5E3D), Color(0xffC43990)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight)
           .createShader(Rect.fromCircle(
-        center: Offset(0, 0),
+        center: const Offset(0, 0),
         radius: radius,
       ));
 

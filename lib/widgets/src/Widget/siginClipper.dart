@@ -1,5 +1,7 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
+// import 'package:flutter/painting.dart';
 import 'package:proste_bezier_curve/proste_bezier_curve.dart';
 
 /// Clip widget in wave shape shape

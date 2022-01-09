@@ -1,10 +1,14 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:puzzzi/links.dart';
 import 'package:puzzzi/utils/url.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+// import 'package:flutter/widgets.dart';
 import 'package:package_info/package_info.dart';
 
 class AboutDialog extends StatelessWidget {
+  const AboutDialog({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     const padding = EdgeInsets.symmetric(horizontal: 24);
@@ -17,7 +21,7 @@ class AboutDialog extends StatelessWidget {
     }
 
     return SimpleDialog(
-      title: Text('About'),
+      title: const Text('About'),
       children: <Widget>[
         HorizontalPadding(const Text('Puzzzi is a free and open source app '
             'written with Flutter. It features beautiful design and '
@@ -28,7 +32,7 @@ class AboutDialog extends StatelessWidget {
                 'The complexity of puzzles is similar from game to game.')),
         const SizedBox(height: 24),
         ListTile(
-          leading: Icon(Icons.code, size: 24),
+          leading: const Icon(Icons.code, size: 24),
           contentPadding: padding,
           title: const Text('Join development'),
           onTap: () {
@@ -36,7 +40,7 @@ class AboutDialog extends StatelessWidget {
           },
         ),
         ListTile(
-          leading: Icon(Icons.bug_report, size: 24),
+          leading: const Icon(Icons.bug_report, size: 24),
           contentPadding: padding,
           title: const Text('Send bug report'),
           onTap: () {

@@ -1,7 +1,11 @@
+import 'dart:developer';
+
 bool platformCheck(bool Function() block) {
   try {
     return block();
-  } catch (e) {}
+  } catch (e) {
+    log(e.toString());
+  }
   return false;
 }
 

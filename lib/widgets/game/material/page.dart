@@ -4,11 +4,11 @@ import 'package:puzzzi/config/ui.dart';
 import 'package:puzzzi/widgets/game/board.dart';
 import 'package:puzzzi/widgets/game/material/control.dart';
 import 'package:puzzzi/widgets/game/material/lead.dart';
-import 'package:puzzzi/widgets/game/material/leaderboard.dart';
+// import 'package:puzzzi/widgets/game/material/leaderboard.dart';
 import 'package:puzzzi/widgets/game/material/sheets.dart';
 import 'package:puzzzi/widgets/game/material/steps.dart';
 import 'package:puzzzi/widgets/game/material/stopwatch.dart';
-import 'package:puzzzi/widgets/game/material/victory.dart';
+// import 'package:puzzzi/widgets/game/material/victory.dart';
 import 'package:puzzzi/widgets/game/presenter/main.dart';
 import 'package:puzzzi/widgets/icons/app.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +26,8 @@ class GameMaterialPage extends StatelessWidget {
   static const kBoardPadding = 4.0;
 
   final FocusNode _boardFocus = FocusNode();
+
+  GameMaterialPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -74,19 +76,20 @@ class GameMaterialPage extends StatelessWidget {
               children: <Widget>[
                 Row(
                   children: [
-                    Text(
-                      "Howdy",
+                    const Text(
+                      "Howdy, ",
                       style: TextStyle(color: Colors.blue, fontSize: 29),
                     ),
                     Text( 
                       "${user!.displayName}",
+                      // ignore: prefer_const_constructors
                       style: TextStyle(
                           color: Colors.lightBlueAccent, fontSize: 35),
                     ),
                   ],
                 ),
                 isTallScreen
-                    ? Container(
+                    ? SizedBox(
                         height: 56,
                         child: Center(
                           child: Row(
@@ -136,13 +139,13 @@ class GameMaterialPage extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       "Howdy",
                       style: TextStyle(color: Colors.blue, fontSize: 29),
                     ),
                     Text(
                       "${user!.displayName}",
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.lightBlueAccent, fontSize: 35),
                     ),
                   ],
@@ -158,7 +161,7 @@ class GameMaterialPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           statusWidget,
-                          SizedBox(height: 48.0),
+                          const SizedBox(height: 48.0),
                           fabWidget,
                         ],
                       ),
@@ -180,11 +183,11 @@ class GameMaterialPage extends StatelessWidget {
             //  _showVictoryDialog() {
     showDialog(
       context: context,
-      builder: (context) => Lead(),
+      builder: (context) => const Lead(),
     );
   // }
         },
-        icon: Icon(Icons.leaderboard));
+        icon: const Icon(Icons.leaderboard));
   }
 
   Widget _buildBoard(final BuildContext context) {
@@ -195,8 +198,8 @@ class GameMaterialPage extends StatelessWidget {
         : Colors.black12;
     return Center(
       child: Container(
-        margin: EdgeInsets.all(kBoardMargin),
-        padding: EdgeInsets.all(kBoardPadding),
+        margin: const EdgeInsets.all(kBoardMargin),
+        padding: const EdgeInsets.all(kBoardPadding),
         decoration: BoxDecoration(
           color: background,
           borderRadius: BorderRadius.circular(16.0),
@@ -215,7 +218,7 @@ class GameMaterialPage extends StatelessWidget {
               autofocus: true,
               focusNode: _boardFocus,
               onKey: (event) {
-                if (!(event is RawKeyDownEvent)) {
+                if (event is! RawKeyDownEvent) {
                   return;
                 }
 
@@ -268,19 +271,19 @@ class GameMaterialPage extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Container(
+        SizedBox(
           width: 48,
           height: 48,
           child: Material(
             elevation: 0.0,
             color: Colors.transparent,
-            shape: CircleBorder(),
+            shape: const CircleBorder(),
             child: InkWell(
               onTap: () {
                 presenter.reset();
               },
-              customBorder: CircleBorder(),
-              child: Icon(
+              customBorder: const CircleBorder(),
+              child: const Icon(
                 Icons.restore,
                 semanticLabel: "Reset",
               ),
@@ -295,13 +298,13 @@ class GameMaterialPage extends StatelessWidget {
           },
         ),
         const SizedBox(width: 16.0),
-        Container(
+        SizedBox(
           width: 48,
           height: 48,
           child: Material(
             elevation: 0.0,
             color: Colors.transparent,
-            shape: CircleBorder(),
+            shape: const CircleBorder(),
             child: InkWell(
               onTap: () {
                 // Show the modal bottom sheet on
@@ -316,8 +319,8 @@ class GameMaterialPage extends StatelessWidget {
                   },
                 );
               },
-              customBorder: CircleBorder(),
-              child: Icon(
+              customBorder: const CircleBorder(),
+              child: const Icon(
                 Icons.settings,
                 semanticLabel: "Settings",
               ),

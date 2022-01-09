@@ -11,6 +11,8 @@ import 'package:puzzzi/widgets/game/page.dart';
 import 'package:puzzzi/widgets/signup.dart';
 
 class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
+
   @override
   _LoginState createState() => _LoginState();
 }
@@ -208,7 +210,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (_) => GamePage()));
+                                            builder: (_) => const GamePage()));
                                   }
                                   if (user == null) {
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -247,7 +249,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (_) => SignUp()));
+                                            builder: (_) => const SignUp()));
                                   },
                                 ),
                           SizedBox(height: size.height * .05),
@@ -349,7 +351,7 @@ class MyPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..shader = const LinearGradient(
-              colors: [const Color(0xffFD5E3D), const Color(0xffC43990)],
+              colors: [Color(0xffFD5E3D), Color(0xffC43990)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight)
           .createShader(Rect.fromCircle(

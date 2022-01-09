@@ -1,6 +1,8 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:convert';
 
-import 'package:meta/meta.dart';
+// import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class Serializable {
@@ -116,7 +118,7 @@ class MapSerializeOutput extends SerializeOutput {
 
   int counter = 0;
 
-  MapSerializeOutput({this.key = "", map}) : this.map = map ?? Map();
+  MapSerializeOutput({this.key = "", map}) : map = map ?? {};
 
   @override
   void writeInt(int? value) {

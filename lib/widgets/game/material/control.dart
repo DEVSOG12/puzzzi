@@ -1,7 +1,9 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+// import 'package:flutter/widgets.dart';
 
 /// Widget that can start / stop
 /// a game.
@@ -10,10 +12,10 @@ class GamePlayStopButton extends StatefulWidget {
 
   final Function()? onTap;
 
-  GamePlayStopButton({
+  const GamePlayStopButton({Key? key, 
     required this.isPlaying,
     this.onTap,
-  });
+  }) : super(key: key);
 
   @override
   _GamePlayStopButtonState createState() => _GamePlayStopButtonState();
@@ -69,7 +71,7 @@ class _GamePlayStopButtonState extends State<GamePlayStopButton>
     final animRatioStop = _range(animation.value, begin: 0.0, end: 1.0);
 
     // Calculate the background color of the FAB.
-    final backgroundColorAccent = theme.accentColor.withOpacity(animRatioPlay);
+    final backgroundColorAccent = theme.colorScheme.secondary.withOpacity(animRatioPlay);
     final backgroundColorCard = theme.cardColor.withOpacity(animRatioStop);
     final backgroundColor =
         Color.alphaBlend(backgroundColorAccent, backgroundColorCard);

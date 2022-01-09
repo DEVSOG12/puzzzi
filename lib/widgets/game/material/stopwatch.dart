@@ -4,7 +4,7 @@ import 'package:puzzzi/widgets/auto_size_text.dart';
 import 'package:puzzzi/widgets/game/format.dart';
 import 'package:puzzzi/widgets/icons/stopwatch.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+// import 'package:flutter/widgets.dart';
 
 /// Widget shows the current time of
 /// a game.
@@ -15,11 +15,11 @@ class GameStopwatchWidget extends StatefulWidget {
 
   final double fontSize;
 
-  GameStopwatchWidget({
+  const GameStopwatchWidget({Key? key, 
     required this.time,
     required this.fontSize,
-    this.timeFormatter: formatElapsedTime,
-  });
+    this.timeFormatter = formatElapsedTime,
+  }) : super(key: key);
 
   @override
   _GameStopwatchWidgetState createState() => _GameStopwatchWidgetState();
@@ -93,7 +93,7 @@ class _GameStopwatchWidgetState extends State<GameStopwatchWidget>
       animation: animation,
       builder: (context, child) {
         return Transform.scale(
-          alignment: Alignment(0.0, 0.75),
+          alignment: const Alignment(0.0, 0.75),
           scale: 0.8 + 0.2 * animation.value,
           child: child,
         );

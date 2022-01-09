@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names, non_constant_identifier_names, empty_catches
+
 import 'dart:convert';
 import 'dart:math';
 
@@ -16,7 +18,7 @@ class GamePresenterWidget extends StatefulWidget {
 
   final Function(Result)? onSolve;
 
-  GamePresenterWidget({required this.child, this.onSolve});
+   const GamePresenterWidget({Key? key, required this.child, this.onSolve}) : super(key: key);
 
   static GamePresenterWidgetState of(BuildContext context) {
     return context
@@ -73,8 +75,8 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
       final plainText = _encrypter.decrypt(encrypted, iv: _SALSA_IV);
 
       jsonMap = json.decode(plainText);
-    } catch (FormatException) {
-      jsonMap = Map<String, dynamic>();
+    } on FormatException {
+      jsonMap = <String, dynamic>{};
     }
 
     int? elapsedTime;
@@ -89,7 +91,7 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
       time = deserializer.readInt();
       steps = deserializer.readInt();
       board = deserializer.readDeserializable(boardFactory);
-    } catch (Exception) {}
+    } on Exception {}
 
     final now = DateTime.now().millisecondsSinceEpoch;
     if ( // validate time
@@ -158,7 +160,7 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
 
   void tap({required Point<int> point}) {
     assert(board != null);
-    assert(point != null);
+    // assert(point != null);
 
     setState(() {
       board = game.tap(board, point: point);
@@ -197,7 +199,7 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
         timeFuture = TIME_STOPPED;
       }
 
-      var boardFuture;
+      Board boardFuture;
       if (isPlaying()) {
         boardFuture = game.shuffle(game.hardest(board),
             amount: board!.size * board!.size);
@@ -254,7 +256,7 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
 
   @override
   Widget build(BuildContext context) {
-    return new _InheritedStateContainer(
+    return  _InheritedStateContainer(
       data: this,
       child: widget.child,
     );
@@ -270,7 +272,7 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
 class _InheritedStateContainer extends InheritedWidget {
   final GamePresenterWidgetState data;
 
-  _InheritedStateContainer({
+  const _InheritedStateContainer({
     Key? key,
     required this.data,
     required Widget child,

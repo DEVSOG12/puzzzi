@@ -1,3 +1,7 @@
+// ignore_for_file: constant_identifier_names
+
+import 'dart:developer';
+
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -6,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ConfigUiContainer extends StatefulWidget {
   final Widget child;
 
-  ConfigUiContainer({required this.child});
+  const ConfigUiContainer({Key? key, required this.child}) : super(key: key);
 
   static _ConfigUiContainerState of(BuildContext context) {
     return context
@@ -75,7 +79,9 @@ class _ConfigUiContainerState extends State<ConfigUiContainer> {
         } else {
           prefs.setBool(_KEY_USE_DARK_THEME, useDarkTheme);
         }
-      } on Exception {}
+      } on Exception {
+        log("ecc[");
+      }
     }
 
     setState(() {
@@ -91,11 +97,13 @@ class _ConfigUiContainerState extends State<ConfigUiContainer> {
       try {
         final prefs = await SharedPreferences.getInstance();
         prefs.setBool(_KEY_SPEED_RUN_MODE_ENABLED, isEnabled!);
-      } on Exception {}
+      } on Exception {
+        log("ecc");
+      }
     }
 
     setState(() {
-      this.isSpeedRunModeEnabled = isEnabled;
+      isSpeedRunModeEnabled = isEnabled;
     });
   }
 
@@ -103,7 +111,7 @@ class _ConfigUiContainerState extends State<ConfigUiContainer> {
   // AppStateContainer --> InheritedStateContainer --> The rest of an app.
   @override
   Widget build(BuildContext context) {
-    return new _InheritedStateContainer(
+    return  _InheritedStateContainer(
       data: this,
       child: widget.child,
     );
@@ -113,7 +121,7 @@ class _ConfigUiContainerState extends State<ConfigUiContainer> {
 class _InheritedStateContainer extends InheritedWidget {
   final _ConfigUiContainerState data;
 
-  _InheritedStateContainer({
+  const _InheritedStateContainer({
     Key? key,
     required this.data,
     required Widget child,

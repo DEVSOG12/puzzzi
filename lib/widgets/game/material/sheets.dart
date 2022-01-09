@@ -1,15 +1,17 @@
-import 'dart:io';
+// import 'dart:io';
+// ignore_for_file: deprecated_member_use
+
 import 'dart:math';
 
 import 'package:puzzzi/config/ui.dart';
 import 'package:puzzzi/data/board.dart';
-import 'package:puzzzi/utils/platform.dart';
+// import 'package:puzzzi/utils/platform.dart';
 import 'package:puzzzi/widgets/about/dialog.dart';
-import 'package:puzzzi/widgets/donate/dialog.dart';
+// import 'package:puzzzi/widgets/donate/dialog.dart';
 import 'package:puzzzi/widgets/game/board.dart';
 import 'package:puzzzi/widgets/game/material/page.dart';
 import 'package:flutter/material.dart' hide AboutDialog;
-import 'package:flutter/widgets.dart';
+// import 'package:flutter/widgets.dart';
 
 Widget createMoreBottomSheet(
   BuildContext context, {
@@ -21,11 +23,11 @@ Widget createMoreBottomSheet(
         child: Column(
           children: <Widget>[
             Container(
-              margin: EdgeInsets.all(8.0),
-              padding: EdgeInsets.all(4.0),
+              margin: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(4.0),
               decoration: BoxDecoration(
                 color: Theme.of(context).brightness == Brightness.dark
-                    ? Colors.black54
+                    ? Colors.white70
                     : Colors.black12,
                 borderRadius: BorderRadius.circular(8.0),
               ),
@@ -73,16 +75,16 @@ Widget createMoreBottomSheet(
       );
 
   final items = <Widget>[
-    SizedBox(height: 16),
+    const SizedBox(height: 16),
     Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        SizedBox(width: 4),
+        const SizedBox(width: 4),
         IconButton(
           icon: const Icon(
-            Icons.settings,
+            Icons.info_outline,
             semanticLabel: "Info",
           ),
           onPressed: () {
@@ -90,7 +92,7 @@ Widget createMoreBottomSheet(
             showDialog(
                 context: context,
                 builder: (context) {
-                  return AboutDialog();
+                  return const AboutDialog();
                 });
           },
         ),
@@ -100,6 +102,7 @@ Widget createMoreBottomSheet(
             child: OutlineButton(
               shape: const RoundedRectangleBorder(
                 borderRadius:
+                    // ignore: unnecessary_const
                     const BorderRadius.all(const Radius.circular(16.0)),
               ),
               onPressed: () {
@@ -123,13 +126,13 @@ Widget createMoreBottomSheet(
             ),
           ),
         ),
-        SizedBox(width: 16),
+        const SizedBox(width: 16),
       ],
     ),
-    SizedBox(height: 4),
+    const SizedBox(height: 4),
     Row(
       children: <Widget>[
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         Expanded(
           child: Align(
             alignment: Alignment.centerLeft,
@@ -143,10 +146,10 @@ Widget createMoreBottomSheet(
             child: createBoard(size: 5),
           ),
         ),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
       ],
     ),
-    SizedBox(height: 16),
+    const SizedBox(height: 16),
     CheckboxListTile(
       dense: true,
       title: const Text('Speed run mode'),
@@ -171,7 +174,7 @@ Widget createMoreBottomSheet(
 
         return Column(
           children: [
-            Container(
+            SizedBox(
               width: width,
               child: Column(
                 mainAxisSize: MainAxisSize.min,

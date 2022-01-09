@@ -64,6 +64,7 @@ class BoardDeserializableFactory extends DeserializableHelper<Board?> {
     const chipFactory = ChipDeserializableFactory();
 
     final blank = input.readDeserializable(pointFactory);
+    // ignore: unnecessary_null_comparison
     if (blank == null) {
       return null;
     }
@@ -72,6 +73,7 @@ class BoardDeserializableFactory extends DeserializableHelper<Board?> {
     final length = size * size - 1;
     for (var i = 0; i < length; i++) {
       final chip = input.readDeserializable(chipFactory);
+      // ignore: unnecessary_null_comparison
       if (chip == null) {
         return null;
       }

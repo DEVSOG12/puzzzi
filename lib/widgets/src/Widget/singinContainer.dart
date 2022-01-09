@@ -1,9 +1,12 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:puzzzi/widgets/src/Widget/signup_clipper.dart';
 
 class SigninContainer extends StatelessWidget {
   const SigninContainer({Key? key}) : super(key: key);
 
+  @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
@@ -12,7 +15,7 @@ class SigninContainer extends StatelessWidget {
           child: Container(
             height: MediaQuery.of(context).size.height * 1,
             width: MediaQuery.of(context).size.width * 1,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Color.fromRGBO(104, 203, 240, 1),
             ),
           ),
@@ -22,12 +25,12 @@ class SigninContainer extends StatelessWidget {
           child: Container(
             height: MediaQuery.of(context).size.height * .55,
             width: MediaQuery.of(context).size.width * 1,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Color.fromRGBO(80, 86, 96, 1),
             ),
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 150, horizontal: 20),
-              child: Text('Welcome \nBack!',
+            child: const Padding(
+              padding:  EdgeInsets.symmetric(vertical: 150, horizontal: 20),
+              child:  Text('Welcome \nBack!',
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(

@@ -190,7 +190,7 @@
 //             ),
 //             trailing: previousPurchase != null
 //                 ? Icon(Icons.check)
-//                 : FlatButton(
+//                 : TextButton(
 //                     shape: const RoundedRectangleBorder(
 //                       borderRadius:
 //                           const BorderRadius.all(const Radius.circular(16.0)),

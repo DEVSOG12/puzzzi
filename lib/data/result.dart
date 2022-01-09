@@ -6,5 +6,5 @@ class Result {
   final int time;
   final int size;
 
-  Result({required this.steps, required this.time, required this.size});
+  const Result({required this.steps, required this.time, required this.size});
 }
