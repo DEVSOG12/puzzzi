@@ -27,7 +27,7 @@ class _GameVictoryDialogState extends State<GameVictoryDialog> {
     final timeFormatted = widget.timeFormatter(widget.result.time);
 
     var point = (widget.result.size ^ 2) *
-            (1 / int.parse(timeFormatted.substring(0, 1))) +
+            (1 / int.parse(timeFormatted[0]) +
         300;
 
     addpoints(int.parse(point.toString()), timeFormatted);
