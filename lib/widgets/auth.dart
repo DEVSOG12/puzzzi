@@ -7,18 +7,22 @@ class AuthService {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
-  Future<UserCredential?> login(
+  Future<dynamic> login(
       {required String email, required String password}) async {
     UserCredential userCredential;
-    userCredential =
-        await auth.signInWithEmailAndPassword(email: email, password: password);
+    try {
+      userCredential = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
+    } catch (e) {
+      return e;
+    }
 
     // auth.signInAnonymously()
 
     return userCredential;
   }
 
-  Future<UserCredential?> signup(
+  Future<dynamic> signup(
       {required String email,
       required String password,
       required String username}) async {
@@ -28,7 +32,7 @@ class AuthService {
           email: email, password: password);
     } catch (e) {
       log(e.toString());
-      return null;
+      return e;
     }
 
     if (userCredential.user != null) {

@@ -782,7 +782,7 @@ class _Chip {
 
   Color? backgroundColor = Colors.white.withOpacity(0.0);
 
-  Color overlayColor = Colors.white;
+  Color overlayColor = Colors.black87;
 
   Map<String, AnimationController> animations = Map();
 

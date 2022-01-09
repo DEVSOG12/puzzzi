@@ -112,21 +112,23 @@ class _SignInPageState extends State<SignInPage> {
               setState(() {
                 isloading = true;
               });
-              UserCredential? user = await AuthService().login(
+              dynamic user = await AuthService().login(
                   email: emailcontroller.text,
                   password: passwordcontroller.text);
 
-              if (user != null) {
-                setState(() {
-                  isloading = false;
-                });
-                log(user.toString());
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => GamePage()));
+              if (user is UserCredential) {
+                if (user.user != null) {
+                  setState(() {
+                    isloading = false;
+                  });
+                  log(user.toString());
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (_) => GamePage()));
+                }
               }
-              if (user == null) {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(const SnackBar(content: Text("Error")));
+              if (user is! UserCredential) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Error: " + user.toString())));
                 log("Error");
               }
             },

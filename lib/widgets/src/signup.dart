@@ -51,7 +51,6 @@ class _SignUpPageState extends State<SignUpPage> {
             textInputAction: TextInputAction.next,
             controller: username,
             decoration: InputDecoration(
-              
               // hintText: 'Enter your full name',
               labelText: 'Name',
               labelStyle: TextStyle(
@@ -126,35 +125,75 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  String getMessageFromErrorCode(error) {
+    switch (error) {
+      case "ERROR_EMAIL_ALREADY_IN_USE":
+      case "account-exists-with-different-credential":
+      case "email-already-in-use":
+        return "Email already used. Go to login page.";
+        break;
+      case "ERROR_WRONG_PASSWORD":
+      case "wrong-password":
+        return "Wrong email/password combination.";
+        break;
+      case "ERROR_USER_NOT_FOUND":
+      case "user-not-found":
+        return "No user found with this email.";
+        break;
+      case "ERROR_USER_DISABLED":
+      case "user-disabled":
+        return "User disabled.";
+        break;
+      case "ERROR_TOO_MANY_REQUESTS":
+      case "operation-not-allowed":
+        return "Too many requests to log into this account.";
+        break;
+      case "ERROR_OPERATION_NOT_ALLOWED":
+      case "operation-not-allowed":
+        return "Server error, please try again later.";
+        break;
+      case "ERROR_INVALID_EMAIL":
+      case "invalid-email":
+        return "Email address is invalid.";
+        break;
+      default:
+        return "Login failed. Please try again.";
+        break;
+    }
+  }
+
   Widget _submitButton() {
     return Align(
       alignment: Alignment.centerRight,
       child: InkWell(
         onTap: () async {
           HapticFeedback.lightImpact();
-          //  setState(() {
-          isloading = true;
-          // });
-          UserCredential? user = await AuthService().signup(
+          setState(() {
+            isloading = true;
+          });
+          dynamic user = await AuthService().signup(
               email: emailcontroller.text,
               password: passwordcontroller.text,
               username: username.text);
 
-          if (user != null) {
-            // setState(() {
-            isloading = false;
-            // });
-            log(user.toString());
-            Navigator.push(
-                context, MaterialPageRoute(builder: (_) => GamePage()));
+          if (user is UserCredential) {
+            if ((user).user != null) {
+              setState(() {
+                isloading = false;
+              });
+
+              log(user.toString());
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => GamePage()));
+            }
           }
-          if (user == null) {
-            // setState(() {
-            isloading = false;
-            // });
-            log("Error");
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text("Error")));
+          if (user! is! UserCredential) {
+            setState(() {
+              isloading = false;
+            });
+            // log("Error : ${getMessageFromErrorCode(user)}");
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Error:  ${user.toString()}")));
           }
         },
         child:
@@ -172,8 +211,10 @@ class _SignUpPageState extends State<SignUpPage> {
             child: ClipOval(
               child: Material(
                 color: Color.fromRGBO(76, 81, 93, 1),
-                child: Icon(Icons.arrow_forward,
-                    color: Colors.white), // button color
+                child: isloading
+                    ? CircularProgressIndicator()
+                    : Icon(Icons.arrow_forward,
+                        color: Colors.white), // button color
               ),
             ),
           ),
