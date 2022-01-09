@@ -83,7 +83,7 @@ class ChipWidget extends StatelessWidget {
 
     var color = Theme.of(context).cardColor;
     color = Color.alphaBlend(backgroundColor, color);
-    // color = Color.alphaBlend(overlayColor, color);
+    color = Color.alphaBlend(overlayColor, color);
 
     log(color.toString() + backgroundColor.toString());
     return Semantics(
