@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math' hide log;
 
 import 'package:flutter/material.dart' hide Chip;
 
@@ -29,6 +30,9 @@ class ChipWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int? mich;
+    mich ?? Random().nextInt(2);
+
     final isCompact = size < 150;
     List images3x3 = [9, 8, 7, 6, 5, 4, 3, 2, 1];
     List images4x4 = [16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
@@ -65,11 +69,11 @@ class ChipWidget extends StatelessWidget {
 
     String? assets() {
       if (boardsize == 3)
-        return "assets/3x3/${images3x3[(int.parse(text!) - 1)]}.png";
+        return "assets/${(mich! + 1).toString()}/3x3/${images3x3[(int.parse(text!) - 1)]}.png";
       if (boardsize == 4)
-        return "assets/4x4/${images4x4[(int.parse(text!) - 1)]}.png";
+        return "assets/${(mich! + 1).toString()}/4x4/${images4x4[(int.parse(text!) - 1)]}.png";
       if (boardsize == 5)
-        return "assets/5x5/${images5x5[(int.parse(text!) - 1)]}.png";
+        return "assets/${(mich! + 1).toString()}/5x5/${images5x5[(int.parse(text!) - 1)]}.png";
     }
 
     final shape = RoundedRectangleBorder(

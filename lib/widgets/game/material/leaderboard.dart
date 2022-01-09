@@ -27,11 +27,20 @@ class _LeaderBoardState extends State<LeaderBoard> {
               return ListView.builder(
                   itemCount: querySnapshot.docs.length,
                   itemBuilder: (_, i) {
-                    DocumentSnapshot documentSnapshot =
-                        querySnapshot.docs[i].data() as DocumentSnapshot;
+                    querySnapshot.docs.sort((a, b) {
+                      return int.parse((a.data() as Map)["point"])
+                          .compareTo(int.parse((b.data() as Map)["point"]));
+                    });
+                    querySnapshot.docs.reversed;
+                    Map documentSnapshot = querySnapshot.docs[i].data() as Map;
                     return ListTile(
-                      leading: Text(documentSnapshot["name"]),
-                      subtitle: Text(documentSnapshot["point"]),
+                      leading: CircleAvatar(
+                        child: Text("#${i + 1}"),
+                      ),
+                      title: Text(documentSnapshot["name"]),
+                      subtitle:
+                          Text(documentSnapshot["point"].toString() + " Points"),
+                      trailing: Text(documentSnapshot["time_taken"]),
                     );
                   });
             } else {

@@ -3,10 +3,12 @@ import 'dart:math';
 import 'package:puzzzi/config/ui.dart';
 import 'package:puzzzi/widgets/game/board.dart';
 import 'package:puzzzi/widgets/game/material/control.dart';
+import 'package:puzzzi/widgets/game/material/lead.dart';
 import 'package:puzzzi/widgets/game/material/leaderboard.dart';
 import 'package:puzzzi/widgets/game/material/sheets.dart';
 import 'package:puzzzi/widgets/game/material/steps.dart';
 import 'package:puzzzi/widgets/game/material/stopwatch.dart';
+import 'package:puzzzi/widgets/game/material/victory.dart';
 import 'package:puzzzi/widgets/game/presenter/main.dart';
 import 'package:puzzzi/widgets/icons/app.dart';
 import 'package:flutter/material.dart';
@@ -174,15 +176,14 @@ class GameMaterialPage extends StatelessWidget {
 
   Widget _ilead(final BuildContext context) {
     return IconButton(
-        onPressed: () => showDialog(
-            context: context,
-            builder: (_) {
-              return Builder(
-                builder: (_) {
-                  return LeaderBoard();
-                },
-              );
-            }),
+        onPressed: (){
+            //  _showVictoryDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => Lead(),
+    );
+  // }
+        },
         icon: Icon(Icons.leaderboard));
   }
 

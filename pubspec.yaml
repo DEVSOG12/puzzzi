@@ -22,6 +22,7 @@ dependencies:
   encrypt: ^5.0.1
   package_info: ^2.0.2
   firebase_core:
+  proste_bezier_curve:
   cloud_firestore:
   
   firebase_auth: ^3.3.4
@@ -38,6 +39,14 @@ flutter:
   uses-material-design: true
 
   assets:
-   - assets/5x5/
-   - assets/4x4/
-   - assets/3x3/
+   - assets/1/5x5/
+   - assets/1/4x4/
+   - assets/1/3x3/   
+   - assets/2/5x5/
+   - assets/2/4x4/
+   - assets/2/3x3/
+  
+  fonts:
+    - family: Inconsolata
+      fonts:
+        - asset: fonts/Inconsolata-Light.ttf
