@@ -26,7 +26,7 @@ class AuthService {
     QuerySnapshot snapshot = await firebaseFirestore.collection("users").get();
     bool isa;
     List p = snapshot.docs.where((element) {
-      return element["username"] == username;
+      return (element.data() as Map)["username"] == username;
     }).toList();
     if (p.isEmpty) {
       return true;
