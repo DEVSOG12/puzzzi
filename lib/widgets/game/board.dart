@@ -1,5 +1,3 @@
-// ignore_for_file: constant_identifier_names
-
 import 'dart:math';
 
 import 'package:puzzzi/data/board.dart';
@@ -7,7 +5,7 @@ import 'package:puzzzi/data/chip.dart';
 import 'package:puzzzi/domain/game.dart';
 import 'package:puzzzi/widgets/game/chip.dart';
 import 'package:flutter/material.dart' hide Chip;
-// import 'package:flutter/widgets.dart';
+import 'package:flutter/widgets.dart';
 
 class BoardWidget extends StatefulWidget {
   final Board? board;
@@ -20,7 +18,7 @@ class BoardWidget extends StatefulWidget {
 
   final bool? isSpeedRunModeEnabled;
 
-  const BoardWidget({
+  BoardWidget({
     Key? key,
     required this.board,
     required this.size,
@@ -61,7 +59,7 @@ class _BoardWidgetState extends State<BoardWidget>
   }
 
   static double _flingDuration(
-      {double friction = _kFriction, required double velocity}) {
+      {double friction: _kFriction, required double velocity}) {
     // See mPhysicalCoeff
     final double scaledFriction = friction * _decelerationForFriction(0.84);
 
@@ -72,7 +70,7 @@ class _BoardWidgetState extends State<BoardWidget>
   }
 
   static double _flingOffset(
-      {double friction = _kFriction, required double velocity}) {
+      {double friction: _kFriction, required double velocity}) {
     var _duration = _flingDuration(friction: friction, velocity: velocity);
     return velocity * _duration / _initialVelocityPenetration;
   }
@@ -90,9 +88,8 @@ class _BoardWidgetState extends State<BoardWidget>
     if (_isSpeedRunModeEnabled!) {
       return (duration.toDouble() * _ANIM_DURATION_MULTIPLIER_SPEED_RUN)
           .toInt();
-    } else {
+    } else
       return (duration.toDouble() * _ANIM_DURATION_MULTIPLIER_NORMAL).toInt();
-    }
   }
 
   @override
@@ -125,9 +122,7 @@ class _BoardWidgetState extends State<BoardWidget>
         // Dispose current animations. This is not necessary, but good
         // to do.
         chips?.forEach((chip) {
-          for (var controller in chip.animations.values) {
-            controller.dispose();
-          }
+          chip.animations.values.forEach((controller) => controller.dispose());
         });
 
         chips = null;
@@ -177,7 +172,7 @@ class _BoardWidgetState extends State<BoardWidget>
               final chip = board.chips[chips!.length + index];
               final x = chip.currentPoint.x / board.size;
               final y = chip.currentPoint.y / board.size;
-              const scale = 0.0; // will be scaled by the animation
+              final scale = 0.0; // will be scaled by the animation
               final color =
                   HSLColor.fromAHSL(1, hueStep * chip.number!, 0.7, 0.5)
                       .toColor();
@@ -465,7 +460,7 @@ class _BoardWidgetState extends State<BoardWidget>
       return SizedBox(
         width: widget.size,
         height: widget.size,
-        child: const Center(
+        child: Center(
           child: Text('Empty board'),
         ),
       );
@@ -476,9 +471,9 @@ class _BoardWidgetState extends State<BoardWidget>
       scale: 1.0,
       chip: (chipSize) => Semantics(
         label: "",
-        child: const Text(
+        child: Text(
           "Blank space",
-          style:  TextStyle(color: Colors.transparent),
+          style: TextStyle(color: Colors.transparent),
         ),
       ),
     );
@@ -789,7 +784,7 @@ class _Chip {
 
   Color overlayColor = Colors.black87;
 
-  Map<String, AnimationController> animations = {};
+  Map<String, AnimationController> animations = Map();
 
   Point<int> currentPoint;
 
@@ -797,7 +792,7 @@ class _Chip {
     this.x,
     this.y,
     this.currentPoint, {
-    this.scale = 1,
+    this.scale: 1,
     this.backgroundColor,
   });
 }

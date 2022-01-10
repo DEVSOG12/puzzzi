@@ -80,7 +80,7 @@ class GameMaterialPage extends StatelessWidget {
                       "Howdy, ",
                       style: TextStyle(color: Colors.blue, fontSize: 29),
                     ),
-                    Text( 
+                    Text(
                       "${user!.displayName}",
                       // ignore: prefer_const_constructors
                       style: TextStyle(
@@ -140,7 +140,7 @@ class GameMaterialPage extends StatelessWidget {
                 Row(
                   children: [
                     const Text(
-                      "Howdy",
+                      "Howdy,  ",
                       style: TextStyle(color: Colors.blue, fontSize: 29),
                     ),
                     Text(
@@ -179,13 +179,13 @@ class GameMaterialPage extends StatelessWidget {
 
   Widget _ilead(final BuildContext context) {
     return IconButton(
-        onPressed: (){
-            //  _showVictoryDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => const Lead(),
-    );
-  // }
+        onPressed: () {
+          //  _showVictoryDialog() {
+          showDialog(
+            context: context,
+            builder: (context) => const Lead(),
+          );
+          // }
         },
         icon: const Icon(Icons.leaderboard));
   }
