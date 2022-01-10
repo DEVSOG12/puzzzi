@@ -199,6 +199,10 @@ class _SignUpPageState extends State<SignUpPage> {
                   SnackBar(content: Text("Error:  ${user.toString()}")));
             }
           } else {
+              setState(() {
+                  isloading = false;
+                });
+
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text("Username Taken")));
           }
