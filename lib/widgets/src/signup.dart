@@ -52,8 +52,8 @@ class _SignUpPageState extends State<SignUpPage> {
             controller: username,
             decoration: const InputDecoration(
               // hintText: 'Enter your full name',
-              labelText: 'Name',
-              labelStyle:  TextStyle(
+              labelText: 'Username',
+              labelStyle: TextStyle(
                   color: Color.fromRGBO(226, 222, 211, 1),
                   fontWeight: FontWeight.w500,
                   fontSize: 13),
@@ -171,29 +171,36 @@ class _SignUpPageState extends State<SignUpPage> {
           setState(() {
             isloading = true;
           });
-          dynamic user = await AuthService().signup(
-              email: emailcontroller.text,
-              password: passwordcontroller.text,
-              username: username.text);
+          bool? can =
+              await AuthService().isuseravailable(username: username.text);
+          if (can!) {
+            dynamic user = await AuthService().signup(
+                email: emailcontroller.text,
+                password: passwordcontroller.text,
+                username: username.text);
 
-          if (user is UserCredential) {
-            if ((user).user != null) {
+            if (user is UserCredential) {
+              if ((user).user != null) {
+                setState(() {
+                  isloading = false;
+                });
+
+                log(user.toString());
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const GamePage()));
+              }
+            }
+            if (user! is! UserCredential) {
               setState(() {
                 isloading = false;
               });
-
-              log(user.toString());
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => const GamePage()));
+              // log("Error : ${getMessageFromErrorCode(user)}");
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Error:  ${user.toString()}")));
             }
-          }
-          if (user! is! UserCredential) {
-            setState(() {
-              isloading = false;
-            });
-            // log("Error : ${getMessageFromErrorCode(user)}");
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Error:  ${user.toString()}")));
+          } else {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text("Username Taken")));
           }
         },
         child:
@@ -228,8 +235,8 @@ class _SignUpPageState extends State<SignUpPage> {
       margin: const EdgeInsets.symmetric(vertical: 20),
       alignment: Alignment.bottomLeft,
       child: InkWell(
-        onTap: () => Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const SignInPage())),
+        onTap: () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const SignInPage())),
         child: const Text(
           'Login',
           style: TextStyle(

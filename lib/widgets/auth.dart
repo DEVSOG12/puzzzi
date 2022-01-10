@@ -22,6 +22,19 @@ class AuthService {
     return userCredential;
   }
 
+  Future<bool?> isuseravailable({String? username}) async {
+    QuerySnapshot snapshot = await firebaseFirestore.collection("users").get();
+    bool isa;
+    List p = snapshot.docs.where((element) {
+      return element["username"] == username;
+    }).toList();
+    if (p.isEmpty) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future<dynamic> signup(
       {required String email,
       required String password,
