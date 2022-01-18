@@ -70,16 +70,7 @@ class _MyMaterialApp extends _MyPlatformApp {
 
   @override
   Widget build(BuildContext context) {
-    bool? islogged;
-
-    final subscription = FirebaseAuth.instance.idTokenChanges().listen(null);
-    subscription.onData((event) async {
-      if (event != null) {
-        islogged = true;
-      } else {
-        islogged = false;
-      }
-    });
+    bool islogged = FirebaseAuth.instance.currentUser != null;
     final ui = ConfigUiContainer.of(context);
 
     ThemeData applyDecor(ThemeData theme) => theme.copyWith(
@@ -145,11 +136,11 @@ class _MyMaterialApp extends _MyPlatformApp {
             ),
           );
 
-          return islogged == null
-              ? const SignUpPage()
-              : islogged!
-                  ? const GamePage()
-                  : const SignInPage();
+          return FirebaseAuth.instance.currentUser != null
+              ? GamePage(
+                  islogged: islogged,
+                )
+              : GamePage(islogged: islogged);
           // return GamePage();
         },
       ),

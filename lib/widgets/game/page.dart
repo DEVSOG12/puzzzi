@@ -3,13 +3,14 @@ import 'package:puzzzi/data/result.dart';
 import 'package:puzzzi/widgets/game/material/page.dart';
 import 'package:puzzzi/widgets/game/material/victory.dart';
 import 'package:puzzzi/widgets/game/presenter/main.dart';
-// import 'package:flutter/cupertino.dart';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/widgets.dart';
 
 class GamePage extends StatelessWidget {
-  const GamePage({Key? key}) : super(key: key);
-                                                                                                                                                              
+  final bool? islogged;
+  const GamePage({Key? key, this.islogged}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final rootWidget = _buildRoot(context);
@@ -23,7 +24,9 @@ class GamePage extends StatelessWidget {
   }
 
   Widget _buildRoot(BuildContext context) {
-    return GameMaterialPage();
+    return GameMaterialPage(
+      islogged: islogged,
+    );
   }
 
   void _showVictoryDialog(BuildContext context, Result result) {

@@ -15,10 +15,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:puzzzi/widgets/src/signin.dart';
+import 'package:puzzzi/widgets/src/signup.dart';
 
 class GameMaterialPage extends StatelessWidget {
   /// Maximum size of the board,
   /// in pixels.
+  final bool? islogged;
+
   static const kMaxBoardSize = 400.0;
 
   static const kBoardMargin = 16.0;
@@ -27,7 +31,7 @@ class GameMaterialPage extends StatelessWidget {
 
   final FocusNode _boardFocus = FocusNode();
 
-  GameMaterialPage({Key? key}) : super(key: key);
+  GameMaterialPage({Key? key, this.islogged}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -77,15 +81,16 @@ class GameMaterialPage extends StatelessWidget {
                 Row(
                   children: [
                     const Text(
-                      "Howdy, ",
+                      "Howdy,",
                       style: TextStyle(color: Colors.blue, fontSize: 29),
                     ),
-                    Text(
-                      "${user!.displayName}",
-                      // ignore: prefer_const_constructors
-                      style: TextStyle(
-                          color: Colors.lightBlueAccent, fontSize: 35),
-                    ),
+                    if (islogged!)
+                      Text(
+                        "${user!.displayName}",
+                        // ignore: prefer_const_constructors
+                        style: TextStyle(
+                            color: Colors.lightBlueAccent, fontSize: 35),
+                      ),
                   ],
                 ),
                 isTallScreen
@@ -137,19 +142,33 @@ class GameMaterialPage extends StatelessWidget {
           body: SafeArea(
             child: Column(
               children: [
-                Row(
-                  children: [
-                    const Text(
-                      "Howdy,  ",
-                      style: TextStyle(color: Colors.blue, fontSize: 29),
-                    ),
-                    Text(
-                      "${user!.displayName}",
-                      style: const TextStyle(
-                          color: Colors.lightBlueAccent, fontSize: 35),
-                    ),
-                  ],
-                ),
+                if (islogged!)
+                  Row(
+                    children: [
+                      const Text(
+                        "Howdy,  ",
+                        style: TextStyle(color: Colors.blue, fontSize: 29),
+                      ),
+                      Text(
+                        "${user!.displayName}",
+                        style: const TextStyle(
+                            color: Colors.lightBlueAccent, fontSize: 35),
+                      ),
+                    ],
+                  ),
+                if (!islogged!)
+                  Row(
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => SignUpPage()));
+                          },
+                          child: Text("Sign Up Now"))
+                    ],
+                  ),
                 Row(
                   children: <Widget>[
                     Expanded(

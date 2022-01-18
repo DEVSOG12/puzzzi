@@ -5,6 +5,8 @@ import 'package:puzzzi/links.dart';
 // import 'package:puzzzi/play_games.dart';
 import 'package:puzzzi/widgets/game/format.dart';
 import 'package:flutter/material.dart';
+import 'package:puzzzi/widgets/src/signin.dart';
+import 'package:puzzzi/widgets/src/signup.dart';
 import 'package:share/share.dart';
 
 class GameVictoryDialog extends StatefulWidget {
@@ -12,9 +14,12 @@ class GameVictoryDialog extends StatefulWidget {
 
   final String Function(int) timeFormatter;
 
+  final bool? islogged;
+
   const GameVictoryDialog({
     Key? key,
     required this.result,
+    this.islogged,
     this.timeFormatter = formatElapsedTime,
   }) : super(key: key);
 
@@ -28,8 +33,9 @@ class _GameVictoryDialogState extends State<GameVictoryDialog> {
     final timeFormatted = widget.timeFormatter(widget.result.time);
 
     var point = (widget.result.size ^ 2) * ((1 / widget.result.time) + 300);
-
-    addpoints(int.parse(point.toString()), timeFormatted);
+    if (widget.islogged!) {
+      addpoints(int.parse(point.toString()), timeFormatted);
+    }
 
     super.initState();
   }
@@ -156,6 +162,15 @@ class _GameVictoryDialogState extends State<GameVictoryDialog> {
               ),
             ],
           ),
+          if (!widget.islogged!)
+            GestureDetector(
+              child: Text(
+                  "You are not logged in! Join the leaderboard by logging in"),
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (_) => SignUpPage()));
+              },
+            )
         ],
       ),
       actions: actions,
