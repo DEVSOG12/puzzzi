@@ -108,10 +108,7 @@ class ChipWidget extends StatelessWidget {
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: fontSize,
-                          color: color.toString() == "Color(0xff1e1e1e)" ||
-                                  color.toString() == "Color(0x0026d9d9)"
-                              ? Colors.black87
-                              : color),
+                          color:  color),
                     )),
                     height: 190.0,
                     width: MediaQuery.of(context).size.width - 100.0,
