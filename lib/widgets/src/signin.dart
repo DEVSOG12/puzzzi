@@ -33,11 +33,11 @@ class _SignInPageState extends State<SignInPage> {
             textInputAction: TextInputAction.next,
             decoration: const InputDecoration(
               labelText: 'Email',
-              labelStyle:  TextStyle(
+              labelStyle: TextStyle(
                   color: Color.fromRGBO(226, 222, 211, 1),
                   fontWeight: FontWeight.bold),
               enabledBorder: UnderlineInputBorder(
-                borderSide:  BorderSide(color: Color.fromRGBO(226, 222, 211, 1)),
+                borderSide: BorderSide(color: Color.fromRGBO(226, 222, 211, 1)),
               ),
             ),
           ),
@@ -123,7 +123,9 @@ class _SignInPageState extends State<SignInPage> {
                   });
                   log(user.toString());
                   Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => const GamePage()));
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const GamePage(islogged: true)));
                 }
               }
               if (user is! UserCredential) {
@@ -143,8 +145,8 @@ class _SignInPageState extends State<SignInPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           InkWell(
-            onTap: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => const SignUpPage())),
+            onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const SignUpPage())),
             child: const Text(
               'Register',
               style: TextStyle(
@@ -159,7 +161,7 @@ class _SignInPageState extends State<SignInPage> {
             //   // Navigator.push(
             //   //     context, MaterialPageRoute(builder: (context) => SignUpPage()));
             // },
-            child:  Text(
+            child: Text(
               'Forgot Password',
               style: TextStyle(
                   fontSize: 14,

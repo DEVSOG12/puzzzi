@@ -210,7 +210,8 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (_) => const GamePage()));
+                                            builder: (_) => const GamePage(
+                                                islogged: true)));
                                   }
                                   if (user == null) {
                                     // setState(() {
@@ -247,8 +248,10 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
                             2,
                             () {
                               HapticFeedback.lightImpact();
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (_) => const Login()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const Login()));
                             },
                           ),
                           SizedBox(height: size.height * .05),

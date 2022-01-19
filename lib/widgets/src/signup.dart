@@ -192,7 +192,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   widget.function;
                 }
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const GamePage()));
+                    MaterialPageRoute(builder: (_) => const GamePage(islogged: true)));
               }
             }
             if (user! is! UserCredential) {

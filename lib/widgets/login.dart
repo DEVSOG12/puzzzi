@@ -210,7 +210,8 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (_) => const GamePage()));
+                                            builder: (_) => const GamePage(
+                                                islogged: true)));
                                   }
                                   if (user == null) {
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -268,7 +269,6 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
 
   Widget component1(IconData icon, String hintText, bool isPassword,
       bool isEmail, TextEditingController controller) {
-        
     Size size = MediaQuery.of(context).size;
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
