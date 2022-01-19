@@ -32,7 +32,10 @@ class GamePage extends StatelessWidget {
   void _showVictoryDialog(BuildContext context, Result result) {
     showDialog(
       context: context,
-      builder: (context) => GameVictoryDialog(result: result),
+      builder: (context) => GameVictoryDialog(
+        result: result,
+        islogged: islogged,
+      ),
     );
   }
 

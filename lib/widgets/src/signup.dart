@@ -4,12 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:puzzzi/widgets/auth.dart';
+import 'package:puzzzi/widgets/game/material/victory.dart';
 import 'package:puzzzi/widgets/game/page.dart';
 import 'package:puzzzi/widgets/src/Widget/signupContainer.dart';
 import 'package:puzzzi/widgets/src/signin.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+  final Function? function;
+  const SignUpPage({Key? key, this.function}) : super(key: key);
 
   @override
   _SignUpPageState createState() => _SignUpPageState();
@@ -186,6 +188,9 @@ class _SignUpPageState extends State<SignUpPage> {
                 });
 
                 log(user.toString());
+                if (widget.function != null) {
+                  widget.function;
+                }
                 Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const GamePage()));
               }
@@ -199,9 +204,9 @@ class _SignUpPageState extends State<SignUpPage> {
                   SnackBar(content: Text("Error:  ${user.toString()}")));
             }
           } else {
-              setState(() {
-                  isloading = false;
-                });
+            setState(() {
+              isloading = false;
+            });
 
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text("Username Taken")));

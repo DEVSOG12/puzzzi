@@ -78,21 +78,29 @@ class GameMaterialPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Row(
-                  children: [
-                    const Text(
-                      "Howdy,",
-                      style: TextStyle(color: Colors.blue, fontSize: 29),
-                    ),
-                    if (islogged!)
+                if (islogged!)
+                  Row(
+                    children: [
                       Text(
-                        "${user!.displayName}",
-                        // ignore: prefer_const_constructors
-                        style: TextStyle(
-                            color: Colors.lightBlueAccent, fontSize: 35),
+                        "Howdy, ${user!.displayName} ",
+                        style:
+                            const TextStyle(color: Colors.blue, fontSize: 29),
                       ),
-                  ],
-                ),
+                    ],
+                  ),
+                if (!islogged!)
+                  Row(
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => SignUpPage()));
+                          },
+                          child: Text("Sign Up Now"))
+                    ],
+                  ),
                 isTallScreen
                     ? SizedBox(
                         height: 56,
@@ -145,14 +153,9 @@ class GameMaterialPage extends StatelessWidget {
                 if (islogged!)
                   Row(
                     children: [
-                      const Text(
-                        "Howdy,  ",
-                        style: TextStyle(color: Colors.blue, fontSize: 29),
-                      ),
                       Text(
-                        "${user!.displayName}",
-                        style: const TextStyle(
-                            color: Colors.lightBlueAccent, fontSize: 35),
+                        "Howdy, ${user!.displayName} ",
+                        style: TextStyle(color: Colors.blue, fontSize: 29),
                       ),
                     ],
                   ),

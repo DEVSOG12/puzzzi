@@ -32,7 +32,8 @@ class _GameVictoryDialogState extends State<GameVictoryDialog> {
   void initState() {
     final timeFormatted = widget.timeFormatter(widget.result.time);
 
-    var point = (widget.result.size ^ 2) * ((1 / widget.result.time) + 300);
+    var point =
+        (widget.result.size ^ 2) * ((1 / widget.result.time * 1000) + 300);
     if (widget.islogged!) {
       addpoints(int.parse(point.toString()), timeFormatted);
     }
@@ -45,10 +46,10 @@ class _GameVictoryDialogState extends State<GameVictoryDialog> {
         .collection("leaderboard")
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get()
-        .then((value) {
+        .then((value) async {
       if (value.exists) {
         if (int.parse(value["point"]) <= point) {
-          FirebaseFirestore.instance
+          await FirebaseFirestore.instance
               .collection("leaderboard")
               .doc(FirebaseAuth.instance.currentUser!.uid)
               .set({
@@ -58,7 +59,7 @@ class _GameVictoryDialogState extends State<GameVictoryDialog> {
           });
         }
       } else {
-        FirebaseFirestore.instance
+        await FirebaseFirestore.instance
             .collection("leaderboard")
             .doc(FirebaseAuth.instance.currentUser!.uid)
             .set({
@@ -73,9 +74,8 @@ class _GameVictoryDialogState extends State<GameVictoryDialog> {
   @override
   Widget build(BuildContext context) {
     final timeFormatted = widget.timeFormatter(widget.result.time);
-    var point = (widget.result.size ^ 2) *
-            (1 / int.parse(timeFormatted.substring(0, 1))) +
-        300;
+    var point =
+        (widget.result.size ^ 2) * ((1 / widget.result.time * 1000) + 300);
     final actions = <Widget>[
       TextButton(
         child: const Text("Share"),
@@ -168,7 +168,18 @@ class _GameVictoryDialogState extends State<GameVictoryDialog> {
                   "You are not logged in! Join the leaderboard by logging in"),
               onTap: () {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => SignUpPage()));
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => SignUpPage(
+                              function: () {
+                                var point = (widget.result.size ^ 2) *
+                                    ((1 / widget.result.time) + 300);
+
+                                addpoints(
+                                    int.parse(point.toString()), timeFormatted);
+                                // addpoints(point, time)
+                              },
+                            )));
               },
             )
         ],

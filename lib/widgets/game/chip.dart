@@ -25,7 +25,8 @@ class ChipWidget extends StatelessWidget {
     this.text,
     this.overlayColor,
     this.backgroundColor,
-    this.fontSize, {Key? key, 
+    this.fontSize, {
+    Key? key,
     required this.onPressed,
     required this.size,
     required this.mich,
@@ -88,7 +89,7 @@ class ChipWidget extends StatelessWidget {
     color = Color.alphaBlend(backgroundColor, color);
     color = Color.alphaBlend(overlayColor, color);
 
-    log(color.toString() + backgroundColor.toString());
+    // log(color.toString() + backgroundColor.toString());
     return Semantics(
       label: "",
       child: Padding(
@@ -108,7 +109,8 @@ class ChipWidget extends StatelessWidget {
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: fontSize,
-                          color:  color),
+                          color:
+                              color == Colors.white ? Colors.black87 : color),
                     )),
                     height: 190.0,
                     width: MediaQuery.of(context).size.width - 100.0,
@@ -116,8 +118,7 @@ class ChipWidget extends StatelessWidget {
                         borderRadius: BorderRadius.circular(5),
                         color: Colors.blue,
                         image: DecorationImage(
-                            image: AssetImage(assets()!),
-                            fit: BoxFit.fill)),
+                            image: AssetImage(assets()!), fit: BoxFit.fill)),
                   )
                 : null,
           ),
