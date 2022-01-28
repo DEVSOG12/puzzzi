@@ -32,8 +32,10 @@ class _GameVictoryDialogState extends State<GameVictoryDialog> {
   void initState() {
     final timeFormatted = widget.timeFormatter(widget.result.time);
 
-    var point =
-        (widget.result.size ^ 2) * ((1 / widget.result.time * 1000) + 300);
+    var points =
+        (widget.result.size ^ 2) * ((1 / widget.result.time * 100000000) + 300);
+    int point = points.toInt();
+
     if (widget.islogged!) {
       addpoints(int.parse(point.toString()), timeFormatted);
     }
@@ -74,8 +76,9 @@ class _GameVictoryDialogState extends State<GameVictoryDialog> {
   @override
   Widget build(BuildContext context) {
     final timeFormatted = widget.timeFormatter(widget.result.time);
-    var point =
-        (widget.result.size ^ 2) * ((1 / widget.result.time * 1000) + 300);
+    var points =
+        (widget.result.size ^ 2) * ((1 / widget.result.time * 100000000) + 300);
+    int point = points.toInt();
     final actions = <Widget>[
       TextButton(
         child: const Text("Share"),

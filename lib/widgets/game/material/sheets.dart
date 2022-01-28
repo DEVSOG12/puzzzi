@@ -130,6 +130,11 @@ Widget createMoreBottomSheet(
       ],
     ),
     const SizedBox(height: 4),
+    Text(
+      "What size do you want to play?",
+      style: TextStyle(fontSize: 28),
+    ),
+    const SizedBox(height: 4),
     Row(
       children: <Widget>[
         const SizedBox(width: 8),
@@ -154,7 +159,7 @@ Widget createMoreBottomSheet(
       dense: true,
       title: const Text('Speed run mode'),
       secondary: const Icon(Icons.timer),
-      subtitle: const Text('Reduce animations and switch controls to taps'),
+      // subtitle: const Text('Reduce animations and switch controls to taps'),
       value: config.isSpeedRunModeEnabled,
       onChanged: (bool? value) {
         var shouldEnableSpeedRun = !config.isSpeedRunModeEnabled!;

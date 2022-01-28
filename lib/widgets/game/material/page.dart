@@ -21,7 +21,7 @@ import 'package:puzzzi/widgets/src/signup.dart';
 class GameMaterialPage extends StatelessWidget {
   /// Maximum size of the board,
   /// in pixels.
-  final bool? islogged;
+  bool? islogged;
 
   static const kMaxBoardSize = 400.0;
 
@@ -172,6 +172,17 @@ class GameMaterialPage extends StatelessWidget {
                           child: Text("Sign Up Now"))
                     ],
                   ),
+                if (islogged!)
+                  Row(
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            FirebaseAuth.instance.signOut();
+                            islogged = false;
+                          },
+                          child: Text("Sign Up Now"))
+                    ],
+                  ),
                 Row(
                   children: <Widget>[
                     Expanded(
@@ -201,6 +212,7 @@ class GameMaterialPage extends StatelessWidget {
 
   Widget _ilead(final BuildContext context) {
     return IconButton(
+        tooltip: "Leaderboard",
         onPressed: () {
           //  _showVictoryDialog() {
           showDialog(
@@ -300,12 +312,13 @@ class GameMaterialPage extends StatelessWidget {
             elevation: 0.0,
             color: Colors.transparent,
             shape: const CircleBorder(),
-            child: InkWell(
-              onTap: () {
+            child: IconButton(
+              tooltip: "Start over",
+              onPressed: () {
                 presenter.reset();
               },
-              customBorder: const CircleBorder(),
-              child: const Icon(
+              // customBorder: const CircleBorder(),
+              icon: const Icon(
                 Icons.restore,
                 semanticLabel: "Reset",
               ),
@@ -325,10 +338,11 @@ class GameMaterialPage extends StatelessWidget {
           height: 48,
           child: Material(
             elevation: 0.0,
-            color: Colors.transparent,
-            shape: const CircleBorder(),
-            child: InkWell(
-              onTap: () {
+            color: Color(0x00000000),
+            // shape: const CircleBorder(),
+            child: IconButton(
+              tooltip: "Settings",
+              onPressed: () {
                 // Show the modal bottom sheet on
                 // tap on "More" icon.
                 showModalBottomSheet<void>(
@@ -341,8 +355,8 @@ class GameMaterialPage extends StatelessWidget {
                   },
                 );
               },
-              customBorder: const CircleBorder(),
-              child: const Icon(
+              // customBorder: const CircleBorder(),
+              icon: const Icon(
                 Icons.settings,
                 semanticLabel: "Settings",
               ),
