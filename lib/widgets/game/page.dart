@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:puzzzi/data/result.dart';
 import 'package:puzzzi/widgets/game/material/end.dart';
 import 'package:puzzzi/widgets/game/material/level_page.dart';
@@ -82,7 +83,8 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  Widget createBoard({int? size, context, label, mode}) => Center(
+  Widget createBoard({int? size, context, label, mode, bool? islogged}) =>
+      Center(
         child: Column(
           children: <Widget>[
             Container(
@@ -98,13 +100,17 @@ class _GamePageState extends State<GamePage> {
                 label: label,
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => Intro(
-                                  islogged: widget.islogged,
-                                  mode: mode == 0 ? true : false,
-                                )));
+                (!islogged! && mode == 1)
+                        ? Fluttertoast.showToast(
+                            msg: "Please sign in to use the Level Mode",
+                            timeInSecForIosWeb: 5)
+                        : Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => Intro(
+                                      islogged: widget.islogged,
+                                      mode: mode == 0 ? true : false,
+                                    )));
                     // Navigator.of(context).pop();
                   },
                   child: LayoutBuilder(
@@ -123,7 +129,13 @@ class _GamePageState extends State<GamePage> {
                         child: Container(
                             height: 160,
                             width: 160,
-                            child: Image.asset("assets/mode/$mode.png")),
+                            child: (mode == 1 && !islogged!)
+                                ? ColorFiltered(
+                                    colorFilter: ColorFilter.mode(
+                                        Colors.black.withOpacity(0.2),
+                                        BlendMode.dstATop),
+                                    child: Image.asset("assets/mode/$mode.png"))
+                                : Image.asset("assets/mode/$mode.png")),
                       );
                     },
                   ),
@@ -171,6 +183,7 @@ class _GamePageState extends State<GamePage> {
                         children: [
                           createBoard(
                             size: 3,
+                            islogged: widget.islogged,
                             context: context,
                             mode: 0,
                             label: "Free Mode",
@@ -181,6 +194,7 @@ class _GamePageState extends State<GamePage> {
                           createBoard(
                             size: 3,
                             context: context,
+                            islogged: widget.islogged,
                             mode: 1,
                             label: "Level Mode",
                           )

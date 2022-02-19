@@ -80,14 +80,14 @@ class _GameEndDialogState extends State<GameEndDialog> {
         (widget.result.size ^ 2) * ((1 / widget.result.time * 100000000) + 300);
     int point = points.toInt();
     final actions = <Widget>[
-      TextButton(
-        child: const Text("Share"),
-        onPressed: () {
-          Share.share("I have solved the Puzzzi's "
-              "${widget.result.size}x${widget.result.size} puzzle in $timeFormatted "
-              "with just ${widget.result.steps} steps! Check it out: $URL_REPOSITORY");
-        },
-      ),
+      // TextButton(
+      //   child: const Text("Share"),
+      //   onPressed: () {
+      //     Share.share("I have solved the Puzzzi's "
+      //         "${widget.result.size}x${widget.result.size} puzzle in $timeFormatted "
+      //         "with just ${widget.result.steps} steps! Check it out: $URL_REPOSITORY");
+      //   },
+      // ),
       TextButton(
         child: const Text("Close"),
         onPressed: () {
@@ -114,19 +114,19 @@ class _GameEndDialogState extends State<GameEndDialog> {
     return AlertDialog(
       title: Center(
         child: Text(
-          "Congratulations!",
+          "You tried!",
           style: Theme.of(context).textTheme.headline5,
         ),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
+          // Text(
+          //   "Points: $point",
+          //   style: const TextStyle(fontSize: 30, color: Colors.blue),
+          // ),
           Text(
-            "Points: $point",
-            style: const TextStyle(fontSize: 30, color: Colors.blue),
-          ),
-          Text(
-              "You've successfuly completed the ${widget.result.size}x${widget.result.size} puzzle"),
+              "Try again to solve ${widget.result.size}x${widget.result.size} puzzle"),
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -139,12 +139,14 @@ class _GameEndDialogState extends State<GameEndDialog> {
                     'Time:',
                     style: Theme.of(context).textTheme.caption,
                   ),
-                  Text(
-                    timeFormatted,
-                    style: Theme.of(context).textTheme.headline3!.copyWith(
-                          color: Theme.of(context).textTheme.bodyText1!.color,
-                        ),
-                  ),
+                  if (!(timeFormatted.length > 7))
+                    Text(
+                      timeFormatted,
+                      style: Theme.of(context).textTheme.headline3!.copyWith(
+                            color: Theme.of(context).textTheme.bodyText1!.color,
+                          ),
+                    ),
+                  if (timeFormatted.length > 7) Text("Time Exhausted")
                 ],
               ),
               Column(

@@ -64,7 +64,7 @@ class GameLevelMaterialPage extends StatelessWidget {
     return OrientationBuilder(builder: (context, orientation) {
       final user = FirebaseAuth.instance.currentUser;
       final now = DateTime.now().millisecondsSinceEpoch;
-
+      int level = 1;
       dev.log(presenter.time.toString());
       final statusWidget = Column(
         mainAxisSize: MainAxisSize.min,
@@ -73,7 +73,7 @@ class GameLevelMaterialPage extends StatelessWidget {
             StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection("users")
-                    .doc("IYbRdAqWGmUtJudNPfTC3d3vwpG2")
+                    .doc(user.uid)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
@@ -82,12 +82,13 @@ class GameLevelMaterialPage extends StatelessWidget {
                     Map<String, dynamic>? snap =
                         snapshots.data() as Map<String, dynamic>?;
                     // Map data = snapshots.data()! as Map;
+                    level = snap!["level"];
 
                     return Column(
                       children: [
                         AutoSizeText(
                           "data",
-                          "Level ${snap!["level"]}",
+                          "Level ${snap["level"]}",
                           minFontSize: 30,
                         ),
                       ],
@@ -97,7 +98,10 @@ class GameLevelMaterialPage extends StatelessWidget {
                   return Text("Shimmer");
                 }),
           GameLevelStopwatchWidget(
-            secondsRemaining: 1,
+            whenTimeExpires: () => presenter.stop(),
+            secondsRemaining: (presenter.board!.size * 2) - 2 * (level % 2),
+            // time: (presenter.board!.size * 2) - 2 * (level % 2),
+            // time: (presenter.board!.size * 3) - level % 2,
             time: 1,
             fontSize: orientation == Orientation.landscape && !isLargeScreen
                 ? 56.0
@@ -112,7 +116,7 @@ class GameLevelMaterialPage extends StatelessWidget {
           StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection("users")
-                  .doc("IYbRdAqWGmUtJudNPfTC3d3vwpG2")
+                  .doc(user!.uid)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
@@ -125,7 +129,7 @@ class GameLevelMaterialPage extends StatelessWidget {
                   if (snap!["max_xp"] <= snap["xp"]) {
                     FirebaseFirestore.instance
                         .collection("users")
-                        .doc("IYbRdAqWGmUtJudNPfTC3d3vwpG2")
+                        .doc(user.uid)
                         .update({
                       "level": snap["level"] + 1,
                       "xp": 0,
