@@ -3,6 +3,8 @@ import 'dart:math';
 
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:puzzzi/data/board.dart';
+import 'dart:async';
+
 import 'package:puzzzi/data/result.dart';
 import 'package:puzzzi/domain/game.dart';
 import 'package:puzzzi/utils/serializable.dart';
@@ -16,7 +18,9 @@ class GamePresenterWidget extends StatefulWidget {
 
   final Function(Result)? onSolve;
 
-  GamePresenterWidget({required this.child, this.onSolve});
+  final Function(Result)? onEnd;
+
+  GamePresenterWidget({required this.child, this.onSolve, this.onEnd});
 
   static GamePresenterWidgetState of(BuildContext context) {
     return context
@@ -49,6 +53,10 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
 
   int? time;
 
+  int? stoptime;
+
+  int timereq = 5;
+
   @override
   void initState() {
     super.initState();
@@ -59,6 +67,27 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
     time = TIME_STOPPED;
 
     _loadState();
+    // level();
+  }
+
+  Timer? timer;
+
+  void level() {
+    const oneSec = Duration(seconds: 1);
+    timer = Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (timereq == 0) {
+          setState(() {
+            timer.cancel();
+          });
+        } else {
+          setState(() {
+            timereq--;
+          });
+        }
+      },
+    );
   }
 
   void _loadState() async {
@@ -140,6 +169,14 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
   }
 
   void stop() {
+    final now = DateTime.now().millisecondsSinceEpoch;
+
+    final result = Result(
+      steps: steps,
+      time: now - time!,
+      size: board!.size,
+    );
+    widget.onEnd?.call(result);
     setState(() {
       time = TIME_STOPPED;
       steps = 0;

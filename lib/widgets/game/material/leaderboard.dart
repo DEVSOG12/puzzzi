@@ -1,7 +1,10 @@
 // import 'dart:developer';
 
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
 
 class LeaderBoard extends StatefulWidget {
   const LeaderBoard({Key? key}) : super(key: key);
@@ -22,17 +25,22 @@ class _LeaderBoardState extends State<LeaderBoard> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             QuerySnapshot querySnapshot = snapshot.data as QuerySnapshot;
-            // log(querySnapshot.docs[]);
+            querySnapshot.docs.sort((a, b) {
+              return ((b.data() as Map)["point"])
+                  .compareTo(((a.data() as Map)["point"]));
+            });
+            // querySnapshot.docs.;
+
+            // log(querySnapshot.docs[]);5
 
             // Text("DATA DEY");
             return ListView.builder(
                 itemCount: querySnapshot.docs.length,
                 itemBuilder: (_, i) {
-                  querySnapshot.docs.sort((a, b) {
-                    return int.parse((a.data() as Map)["point"])
-                        .compareTo(int.parse((b.data() as Map)["point"]));
-                  });
-                  querySnapshot.docs.reversed;
+                  // log(querySnapshot.docs[i].toString());
+
+                  log(querySnapshot.docs.toString());
+
                   Map documentSnapshot = querySnapshot.docs[i].data() as Map;
                   return ListTile(
                     leading: CircleAvatar(
@@ -40,8 +48,8 @@ class _LeaderBoardState extends State<LeaderBoard> {
                       child: Text("#${i + 1}"),
                     ),
                     title: Text(documentSnapshot["name"]),
-                    subtitle: Text(
-                        documentSnapshot["point"].toString() + " Points"),
+                    subtitle:
+                        Text(documentSnapshot["point"].toString() + " Points"),
                     trailing: Text(documentSnapshot["time_taken"]),
                   );
                 });

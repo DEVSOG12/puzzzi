@@ -226,8 +226,14 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                 2.58,
                                 () {
                                   HapticFeedback.lightImpact();
-                                  Fluttertoast.showToast(
-                                      msg: 'Forgotten password button pressed');
+                                  if (emailcontroller.text.isNotEmpty) {
+                                    FirebaseAuth.instance
+                                        .sendPasswordResetEmail(
+                                            email: emailcontroller.text);
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg: "Enter Email Address");
+                                  }
                                 },
                               ),
                             ],

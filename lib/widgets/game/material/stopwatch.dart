@@ -15,7 +15,8 @@ class GameStopwatchWidget extends StatefulWidget {
 
   final double fontSize;
 
-  const GameStopwatchWidget({Key? key, 
+  const GameStopwatchWidget({
+    Key? key,
     required this.time,
     required this.fontSize,
     this.timeFormatter = formatElapsedTime,
@@ -135,5 +136,93 @@ class _GameStopwatchWidgetState extends State<GameStopwatchWidget>
   void _disposeTimer() {
     timer?.cancel();
     timer = null;
+  }
+}
+
+class GameLevelStopwatchWidget extends StatefulWidget {
+  final int? time;
+
+  final String Function(int) timeFormatter;
+
+  final double fontSize;
+
+  final int? secondsRemaining;
+  final VoidCallback? whenTimeExpires;
+
+  const GameLevelStopwatchWidget({
+    Key? key,
+    required this.time,
+    required this.fontSize,
+    this.timeFormatter = formatElapsedTime,
+    this.secondsRemaining,
+    this.whenTimeExpires,
+  }) : super(key: key);
+
+  @override
+  _GameLevelStopwatchWidgetState createState() =>
+      _GameLevelStopwatchWidgetState();
+}
+
+class _GameLevelStopwatchWidgetState extends State<GameLevelStopwatchWidget>
+    with SingleTickerProviderStateMixin {
+        late AnimationController _animationController;
+  // late Animation _rotationAnimation;
+      @override
+  void initState() {
+    super.initState();
+    _animationController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+
+    
+
+     _animationController.forward();
+  }
+  @override
+  Widget build(BuildContext context) {
+    
+    return TweenAnimationBuilder(
+      
+      duration: Duration(minutes: widget.time!),
+      tween: Tween(begin: Duration(minutes: widget.time!), end: Duration.zero),
+      onEnd: () => widget.whenTimeExpires!(),
+
+      builder: (BuildContext context, Duration value, Widget? child) {
+        final minutes = value.inMinutes;
+        final seconds = value.inSeconds % 60;
+        final timeStr = widget.timeFormatter(value.inMilliseconds);
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(
+              width: 220.0,
+              height: 108.0,
+              child: AutoSizeText(
+                minutes.toString(),
+                timeStr,
+                maxLines: 1,
+                style: Theme.of(context).textTheme.headline5!.copyWith(
+                      fontSize: widget.fontSize,
+                      color: Theme.of(context).textTheme.headline6!.color,
+                    ),
+              ),
+            ),
+            const SizedBox(width: 16.0),
+            StopwatchIcon(
+              size: 24,
+              millis: value.inMilliseconds,
+              color: Theme.of(context).iconTheme.color,
+            ),
+          ],
+        );
+      },
+      // builder: (context, child) {
+      //   return Transform.scale(
+      //     alignment: const Alignment(0.0, 0.75),
+      //     scale: 0.8 + 0.2 * animation.value,
+      //     child: child,
+      //   );
+      // },
+    );
   }
 }

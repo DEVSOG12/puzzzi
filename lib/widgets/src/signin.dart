@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:puzzzi/widgets/auth.dart';
 import 'package:puzzzi/widgets/game/page.dart';
 import 'package:puzzzi/widgets/src/Widget/singinContainer.dart';
@@ -132,6 +133,9 @@ class _SignInPageState extends State<SignInPage> {
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("Error: " + user.toString())));
                 log("Error");
+                setState(() {
+                  isloading = false;
+                });
               }
             },
           );
@@ -156,12 +160,21 @@ class _SignInPageState extends State<SignInPage> {
                   decorationThickness: 2),
             ),
           ),
-          const InkWell(
-            // onTap: () {
-            //   // Navigator.push(
-            //   //     context, MaterialPageRoute(builder: (context) => SignUpPage()));
-            // },
-            child: Text(
+          InkWell(
+            onTap: () {
+              HapticFeedback.lightImpact();
+              if (emailcontroller.text.isNotEmpty) {
+                FirebaseAuth.instance
+                    .sendPasswordResetEmail(email: emailcontroller.text)
+                    .whenComplete(() {
+                  Fluttertoast.showToast(
+                      msg: "Check your email for Resetting instructions");
+                });
+              } else {
+                Fluttertoast.showToast(msg: "Enter Email Address");
+              }
+            },
+            child: const Text(
               'Forgot Password',
               style: TextStyle(
                   fontSize: 14,

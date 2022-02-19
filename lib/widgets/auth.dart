@@ -54,7 +54,14 @@ class AuthService {
       await firebaseFirestore
           .collection("users")
           .doc(userCredential.user!.uid)
-          .set({"username": username, "email": email, "time": DateTime.now()});
+          .set({
+        "username": username,
+        "email": email,
+        "time": DateTime.now(),
+        "level": 1,
+        "xp": 70,
+        "max_xp": 250
+      });
     }
 
     return userCredential;

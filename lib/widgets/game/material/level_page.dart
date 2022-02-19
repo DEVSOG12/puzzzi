@@ -1,6 +1,9 @@
+import 'dart:developer' as dev;
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:puzzzi/config/ui.dart';
+import 'package:puzzzi/widgets/auto_size_text.dart';
 import 'package:puzzzi/widgets/game/board.dart';
 import 'package:puzzzi/widgets/game/material/control.dart';
 import 'package:puzzzi/widgets/game/material/lead.dart';
@@ -10,6 +13,8 @@ import 'package:puzzzi/widgets/game/material/steps.dart';
 import 'package:puzzzi/widgets/game/material/stopwatch.dart';
 // import 'package:puzzzi/widgets/game/material/victory.dart';
 import 'package:puzzzi/widgets/game/presenter/main.dart';
+import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
+
 import 'package:puzzzi/widgets/icons/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,7 +23,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:puzzzi/widgets/src/signin.dart';
 import 'package:puzzzi/widgets/src/signup.dart';
 
-class GameMaterialPage extends StatelessWidget {
+int t = DateTime.now().millisecond;
+
+class GameLevelMaterialPage extends StatelessWidget {
   /// Maximum size of the board,
   /// in pixels.
   bool? islogged;
@@ -31,10 +38,11 @@ class GameMaterialPage extends StatelessWidget {
 
   final FocusNode _boardFocus = FocusNode();
 
-  GameMaterialPage({Key? key, this.islogged}) : super(key: key);
+  GameLevelMaterialPage({Key? key, this.islogged}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // GamePresenterWidget.of(context).timereq = 5;
     final presenter = GamePresenterWidget.of(context);
 
     final screenSize = MediaQuery.of(context).size;
@@ -52,12 +60,45 @@ class GameMaterialPage extends StatelessWidget {
 
     final fabWidget = _buildFab(context);
     final boardWidget = _buildBoard(context);
+
     return OrientationBuilder(builder: (context, orientation) {
+      final user = FirebaseAuth.instance.currentUser;
+      final now = DateTime.now().millisecondsSinceEpoch;
+
+      dev.log(presenter.time.toString());
       final statusWidget = Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          GameStopwatchWidget(
-            time: presenter.time,
+          if (user != null)
+            StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection("users")
+                    .doc("IYbRdAqWGmUtJudNPfTC3d3vwpG2")
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    DocumentSnapshot snapshots =
+                        snapshot.data as DocumentSnapshot;
+                    Map<String, dynamic>? snap =
+                        snapshots.data() as Map<String, dynamic>?;
+                    // Map data = snapshots.data()! as Map;
+
+                    return Column(
+                      children: [
+                        AutoSizeText(
+                          "data",
+                          "Level ${snap!["level"]}",
+                          minFontSize: 30,
+                        ),
+                      ],
+                    );
+                  }
+
+                  return Text("Shimmer");
+                }),
+          GameLevelStopwatchWidget(
+            secondsRemaining: 1,
+            time: 1,
             fontSize: orientation == Orientation.landscape && !isLargeScreen
                 ? 56.0
                 : 72.0,
@@ -65,8 +106,53 @@ class GameMaterialPage extends StatelessWidget {
           GameStepsWidget(
             steps: presenter.steps,
           ),
+          const SizedBox(
+            height: 10,
+          ),
+          StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection("users")
+                  .doc("IYbRdAqWGmUtJudNPfTC3d3vwpG2")
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  DocumentSnapshot snapshots =
+                      snapshot.data as DocumentSnapshot;
+                  Map<String, dynamic>? snap =
+                      snapshots.data() as Map<String, dynamic>?;
+                  // Map data = snapshots.data()! as Map;
+
+                  if (snap!["max_xp"] <= snap["xp"]) {
+                    FirebaseFirestore.instance
+                        .collection("users")
+                        .doc("IYbRdAqWGmUtJudNPfTC3d3vwpG2")
+                        .update({
+                      "level": snap["level"] + 1,
+                      "xp": 0,
+                      "max_xp": (snap["level"] + 1) * 250
+                    });
+                  }
+                  return Column(
+                    children: [
+                      FAProgressBar(
+                        animatedDuration: const Duration(seconds: 2),
+                        progressColor: Colors.primaries[snap["level"] % 10],
+                        displayText: "${snap["xp"]} XP/ ${snap["max_xp"]} XP",
+                        displayTextStyle: TextStyle(
+                          color: Colors.black,
+                        ),
+                        currentValue:
+                            ((snap["xp"] / snap["max_xp"]) * 100 as double)
+                                .round(),
+                      )
+                    ],
+                  );
+                }
+
+                return Text("Shimmer");
+              }),
         ],
-      );  
+      );
 
       if (orientation == Orientation.portrait) {
         final user = FirebaseAuth.instance.currentUser;
