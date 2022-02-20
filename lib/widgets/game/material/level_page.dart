@@ -118,9 +118,9 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
               // time: 1,
               fontSize: orientation == Orientation.landscape && !isLargeScreen
                   ? 56
-                  : !(presenter.isPlaying() &&
+                  : (presenter.isPlaying() &&
                           (orientation == Orientation.portrait))
-                      ? 40
+                      ? 30
                       : 72.0,
             ),
           ),
