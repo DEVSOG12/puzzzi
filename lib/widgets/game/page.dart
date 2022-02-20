@@ -173,50 +173,48 @@ class _GamePageState extends State<GamePage> {
         barrierDismissible: false,
         context: context,
         builder: (_) {
-          return Expanded(
-            child: AlertDialog(
-              title: Center(
-                child: Text(
-                  "Choose Game Mode!",
-                  style: Theme.of(context).textTheme.headline5,
-                ),
+          return AlertDialog(
+            title: Center(
+              child: Text(
+                "Choose Game Mode!",
+                style: Theme.of(context).textTheme.headline5,
               ),
-              content: Container(
-                height: MediaQuery.of(context).size.height / 3,
-                width: MediaQuery.of(context).size.width / 2,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    FittedBox(
-                      child: Center(
-                        child: Row(
-                          children: [
-                            createBoard(
-                              size: 3,
-                              islogged: widget.islogged,
-                              context: context,
-                              mode: 0,
-                              label: "Free Mode",
-                            ),
-                            SizedBox(
-                              width: 30,
-                            ),
-                            createBoard(
-                              size: 3,
-                              context: context,
-                              islogged: widget.islogged,
-                              mode: 1,
-                              label: "Level Mode",
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              actions: actions,
             ),
+            content: Container(
+              height: MediaQuery.of(context).size.height / 3,
+              width: MediaQuery.of(context).size.width / 2,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  FittedBox(
+                    child: Center(
+                      child: Row(
+                        children: [
+                          createBoard(
+                            size: 3,
+                            islogged: widget.islogged,
+                            context: context,
+                            mode: 0,
+                            label: "Free Mode",
+                          ),
+                          SizedBox(
+                            width: 30,
+                          ),
+                          createBoard(
+                            size: 3,
+                            context: context,
+                            islogged: widget.islogged,
+                            mode: 1,
+                            label: "Level Mode",
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            actions: actions,
           );
         });
   }
