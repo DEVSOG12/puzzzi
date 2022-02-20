@@ -117,8 +117,11 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
               // time: (presenter.board!.size * 3) - level % 2,
               // time: 1,
               fontSize: orientation == Orientation.landscape && !isLargeScreen
-                  ? 56.0
-                  : 72.0,
+                  ? 56
+                  : !(presenter.isPlaying() &&
+                          (orientation == Orientation.portrait))
+                      ? 40
+                      : 72.0,
             ),
           ),
           GameStepsWidget(
@@ -127,59 +130,61 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
           const SizedBox(
             height: 10,
           ),
-          StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection("users")
-                  .doc(user!.uid)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  DocumentSnapshot snapshots =
-                      snapshot.data as DocumentSnapshot;
-                  Map<String, dynamic>? snap =
-                      snapshots.data() as Map<String, dynamic>?;
-                  // Map data = snapshots.data()! as Map;
+          // presenter.widget.or
+          if (!(presenter.isPlaying() && (orientation == Orientation.portrait)))
+            StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection("users")
+                    .doc(user!.uid)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    DocumentSnapshot snapshots =
+                        snapshot.data as DocumentSnapshot;
+                    Map<String, dynamic>? snap =
+                        snapshots.data() as Map<String, dynamic>?;
+                    // Map data = snapshots.data()! as Map;
 
-                  if (snap!["max_xp"] <= snap["xp"]) {
-                    FirebaseFirestore.instance
-                        .collection("users")
-                        .doc(user.uid)
-                        .update({
-                      "level": snap["level"] + 1,
-                      "xp": 0,
-                      "max_xp": (snap["level"] + 1) * 250
-                    });
+                    if (snap!["max_xp"] <= snap["xp"]) {
+                      FirebaseFirestore.instance
+                          .collection("users")
+                          .doc(user.uid)
+                          .update({
+                        "level": snap["level"] + 1,
+                        "xp": 0,
+                        "max_xp": (snap["level"] + 1) * 250
+                      });
+                    }
+
+                    if (((snap["level"] % 10) == 0) && (snap["xp"] == 0)) {
+                      FirebaseFirestore.instance
+                          .collection("users")
+                          .doc(user.uid)
+                          .update({
+                        // "level": snap["level"] + 1,
+                        "xp": snap["level"] * 10,
+                        // "max_xp": (snap["level"] + 1) * 250
+                      });
+                    }
+                    return Column(
+                      children: [
+                        FAProgressBar(
+                          animatedDuration: const Duration(seconds: 2),
+                          progressColor: Colors.primaries[snap["level"] % 10],
+                          displayText: "${snap["xp"]} XP/ ${snap["max_xp"]} XP",
+                          displayTextStyle: TextStyle(
+                            color: Colors.black,
+                          ),
+                          currentValue:
+                              ((snap["xp"] / snap["max_xp"]) * 100 as double)
+                                  .round(),
+                        )
+                      ],
+                    );
                   }
 
-                  if (((snap["level"] % 10) == 0) && (snap["xp"] == 0)) {
-                    FirebaseFirestore.instance
-                        .collection("users")
-                        .doc(user.uid)
-                        .update({
-                      // "level": snap["level"] + 1,
-                      "xp": snap["level"] * 10,
-                      // "max_xp": (snap["level"] + 1) * 250
-                    });
-                  }
-                  return Column(
-                    children: [
-                      FAProgressBar(
-                        animatedDuration: const Duration(seconds: 2),
-                        progressColor: Colors.primaries[snap["level"] % 10],
-                        displayText: "${snap["xp"]} XP/ ${snap["max_xp"]} XP",
-                        displayTextStyle: TextStyle(
-                          color: Colors.black,
-                        ),
-                        currentValue:
-                            ((snap["xp"] / snap["max_xp"]) * 100 as double)
-                                .round(),
-                      )
-                    ],
-                  );
-                }
-
-                return Text("Shimmer");
-              }),
+                  return Text("Shimmer");
+                }),
         ],
       );
 
