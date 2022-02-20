@@ -25,7 +25,7 @@ import 'package:puzzzi/widgets/src/signup.dart';
 
 int t = DateTime.now().millisecond;
 
-class GameLevelMaterialPage extends StatelessWidget {
+class GameLevelMaterialPage extends StatefulWidget {
   /// Maximum size of the board,
   /// in pixels.
   bool? islogged;
@@ -35,10 +35,16 @@ class GameLevelMaterialPage extends StatelessWidget {
   static const kBoardMargin = 16.0;
 
   static const kBoardPadding = 4.0;
-
-  final FocusNode _boardFocus = FocusNode();
+  bool show = false;
 
   GameLevelMaterialPage({Key? key, this.islogged}) : super(key: key);
+
+  @override
+  State<GameLevelMaterialPage> createState() => _GameLevelMaterialPageState();
+}
+
+class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
+  final FocusNode _boardFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +71,7 @@ class GameLevelMaterialPage extends StatelessWidget {
       final user = FirebaseAuth.instance.currentUser;
       final now = DateTime.now().millisecondsSinceEpoch;
       int level = 1;
-      dev.log(presenter.time.toString());
+      // dev.log(presenter.time.toString());
       final statusWidget = Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -97,15 +103,23 @@ class GameLevelMaterialPage extends StatelessWidget {
 
                   return Text("Shimmer");
                 }),
-          GameLevelStopwatchWidget(
-            whenTimeExpires: () => presenter.stop(),
-            secondsRemaining: (presenter.board!.size * 2) - 2 * (level % 2),
-            // time: (presenter.board!.size * 2) - 2 * (level % 2),
-            // time: (presenter.board!.size * 3) - level % 2,
-            time: 1,
-            fontSize: orientation == Orientation.landscape && !isLargeScreen
-                ? 56.0
-                : 72.0,
+          Visibility(
+            visible: (widget.show && !presenter.show),
+            child: GameLevelStopwatchWidget(
+              whenTimeExpires: () {
+                setState(() {
+                  widget.show = false;
+                });
+                presenter.stop(false);
+              },
+              secondsRemaining: (presenter.board!.size * 2) - 2 * (level % 2),
+              time: (presenter.board!.size * 2) - 2 * (level % 2),
+              // time: (presenter.board!.size * 3) - level % 2,
+              // time: 1,
+              fontSize: orientation == Orientation.landscape && !isLargeScreen
+                  ? 56.0
+                  : 72.0,
+            ),
           ),
           GameStepsWidget(
             steps: presenter.steps,
@@ -134,6 +148,17 @@ class GameLevelMaterialPage extends StatelessWidget {
                       "level": snap["level"] + 1,
                       "xp": 0,
                       "max_xp": (snap["level"] + 1) * 250
+                    });
+                  }
+
+                  if (((snap["level"] % 10) == 0) && (snap["xp"] == 0)) {
+                    FirebaseFirestore.instance
+                        .collection("users")
+                        .doc(user.uid)
+                        .update({
+                      // "level": snap["level"] + 1,
+                      "xp": snap["level"] * 10,
+                      // "max_xp": (snap["level"] + 1) * 250
                     });
                   }
                   return Column(
@@ -168,7 +193,7 @@ class GameLevelMaterialPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                if (islogged!)
+                if (FirebaseAuth.instance.currentUser != null)
                   Row(
                     children: [
                       Text(
@@ -178,7 +203,7 @@ class GameLevelMaterialPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                if (!islogged!)
+                if (FirebaseAuth.instance.currentUser == null)
                   Row(
                     children: [
                       TextButton(
@@ -240,7 +265,7 @@ class GameLevelMaterialPage extends StatelessWidget {
           body: SafeArea(
             child: Column(
               children: [
-                if (islogged!)
+                if (FirebaseAuth.instance.currentUser != null)
                   Row(
                     children: [
                       Text(
@@ -249,7 +274,7 @@ class GameLevelMaterialPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                if (!islogged!)
+                if (FirebaseAuth.instance.currentUser == null)
                   Row(
                     children: [
                       TextButton(
@@ -258,17 +283,6 @@ class GameLevelMaterialPage extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                     builder: (_) => SignUpPage()));
-                          },
-                          child: Text("Sign Up Now"))
-                    ],
-                  ),
-                if (islogged!)
-                  Row(
-                    children: [
-                      TextButton(
-                          onPressed: () {
-                            FirebaseAuth.instance.signOut();
-                            islogged = false;
                           },
                           child: Text("Sign Up Now"))
                     ],
@@ -322,8 +336,8 @@ class GameLevelMaterialPage extends StatelessWidget {
         : Colors.black12;
     return Center(
       child: Container(
-        margin: const EdgeInsets.all(kBoardMargin),
-        padding: const EdgeInsets.all(kBoardPadding),
+        margin: const EdgeInsets.all(GameLevelMaterialPage.kBoardMargin),
+        padding: const EdgeInsets.all(GameLevelMaterialPage.kBoardPadding),
         decoration: BoxDecoration(
           color: background,
           borderRadius: BorderRadius.circular(16.0),
@@ -335,7 +349,10 @@ class GameLevelMaterialPage extends StatelessWidget {
                 constraints.maxWidth,
                 constraints.maxHeight,
               ),
-              kMaxBoardSize - (kBoardMargin + kBoardPadding) * 2,
+              GameLevelMaterialPage.kMaxBoardSize -
+                  (GameLevelMaterialPage.kBoardMargin +
+                          GameLevelMaterialPage.kBoardPadding) *
+                      2,
             );
 
             return RawKeyboardListener(
@@ -419,6 +436,15 @@ class GameLevelMaterialPage extends StatelessWidget {
         GamePlayStopButton(
           isPlaying: presenter.isPlaying(),
           onTap: () {
+            if (!presenter.isPlaying()) {
+              setState(() {
+                widget.show = true;
+              });
+            } else {
+              setState(() {
+                widget.show = false;
+              });
+            }
             presenter.playStop();
           },
         ),
@@ -439,7 +465,7 @@ class GameLevelMaterialPage extends StatelessWidget {
                   context: context,
                   isScrollControlled: true,
                   builder: (BuildContext context) {
-                    return createMoreBottomSheet(context, call: (size) {
+                    return createMoreBottomSheet(context, true, call: (size) {
                       presenter.resize(size);
                     });
                   },

@@ -66,7 +66,7 @@ class GameMaterialPage extends StatelessWidget {
             steps: presenter.steps,
           ),
         ],
-      );  
+      );
 
       if (orientation == Orientation.portrait) {
         final user = FirebaseAuth.instance.currentUser;
@@ -78,7 +78,7 @@ class GameMaterialPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                if (islogged!)
+                if (FirebaseAuth.instance.currentUser != null)
                   Row(
                     children: [
                       Text(
@@ -88,7 +88,7 @@ class GameMaterialPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                if (!islogged!)
+                if (FirebaseAuth.instance.currentUser == null)
                   Row(
                     children: [
                       TextButton(
@@ -150,7 +150,7 @@ class GameMaterialPage extends StatelessWidget {
           body: SafeArea(
             child: Column(
               children: [
-                if (islogged!)
+                if (FirebaseAuth.instance.currentUser != null)
                   Row(
                     children: [
                       Text(
@@ -159,7 +159,7 @@ class GameMaterialPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                if (!islogged!)
+                if (FirebaseAuth.instance.currentUser == null)
                   Row(
                     children: [
                       TextButton(
@@ -168,17 +168,6 @@ class GameMaterialPage extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                     builder: (_) => SignUpPage()));
-                          },
-                          child: Text("Sign Up Now"))
-                    ],
-                  ),
-                if (islogged!)
-                  Row(
-                    children: [
-                      TextButton(
-                          onPressed: () {
-                            FirebaseAuth.instance.signOut();
-                            islogged = false;
                           },
                           child: Text("Sign Up Now"))
                     ],
@@ -349,7 +338,7 @@ class GameMaterialPage extends StatelessWidget {
                   context: context,
                   isScrollControlled: true,
                   builder: (BuildContext context) {
-                    return createMoreBottomSheet(context, call: (size) {
+                    return createMoreBottomSheet(context, false, call: (size) {
                       presenter.resize(size);
                     });
                   },

@@ -15,12 +15,14 @@ class GameVictoryDialog extends StatefulWidget {
   final String Function(int) timeFormatter;
 
   final bool? islogged;
+  final bool? mode;
 
   const GameVictoryDialog({
     Key? key,
     required this.result,
     this.islogged,
     this.timeFormatter = formatElapsedTime,
+    this.mode,
   }) : super(key: key);
 
   @override
@@ -44,13 +46,38 @@ class _GameVictoryDialogState extends State<GameVictoryDialog> {
   }
 
   void addpoints(int point, String time) {
+    if (!widget.mode!) {
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get()
+          .then((value) async {
+        if (value.exists) {
+          // int level =
+          // value.data()!["level"];
+          int xp = value.data()!["xp"];
+          // int max =
+          // value.data()!["max_xp"];
+  
+          await FirebaseFirestore.instance
+              .collection("users")
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .update({
+            "xp": (xp + point),
+          });
+
+          // value.data()![""];
+        }
+      });
+    }
+
     FirebaseFirestore.instance
         .collection("leaderboard")
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get()
         .then((value) async {
       if (value.exists) {
-        if (int.parse(value["point"]) <= point) {
+        if (int.parse(value.data()!["point"]) <= point) {
           await FirebaseFirestore.instance
               .collection("leaderboard")
               .doc(FirebaseAuth.instance.currentUser!.uid)

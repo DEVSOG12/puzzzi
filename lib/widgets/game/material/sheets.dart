@@ -3,6 +3,7 @@
 
 import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:puzzzi/config/ui.dart';
 import 'package:puzzzi/data/board.dart';
 // import 'package:puzzzi/utils/platform.dart';
@@ -11,10 +12,13 @@ import 'package:puzzzi/widgets/about/dialog.dart';
 import 'package:puzzzi/widgets/game/board.dart';
 import 'package:puzzzi/widgets/game/material/page.dart';
 import 'package:flutter/material.dart' hide AboutDialog;
+
+import '../page.dart';
 // import 'package:flutter/widgets.dart';
 
 Widget createMoreBottomSheet(
-  BuildContext context, {
+  BuildContext context,
+  bool mode, {
   required Function(int?) call,
 }) {
   final config = ConfigUiContainer.of(context);
@@ -95,6 +99,29 @@ Widget createMoreBottomSheet(
                   return const AboutDialog();
                 });
           },
+        ),
+        Expanded(
+          child: Align(
+            alignment: Alignment.center,
+            child: OutlineButton(
+              color: Colors.lightBlue,
+              shape: const RoundedRectangleBorder(
+                borderRadius:
+                    // ignore: unnecessary_const
+                    const BorderRadius.all(const Radius.circular(16.0)),
+              ),
+              onPressed: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => Intro(
+                            islogged: FirebaseAuth.instance.currentUser != null,
+                            mode: !mode)));
+                mode = !mode;
+              },
+              child: Text(mode ? "Level Mode" : "Free Mode"),
+            ),
+          ),
         ),
         Expanded(
           child: Align(

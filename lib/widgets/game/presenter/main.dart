@@ -9,6 +9,7 @@ import 'package:puzzzi/data/result.dart';
 import 'package:puzzzi/domain/game.dart';
 import 'package:puzzzi/utils/serializable.dart';
 import 'package:flutter/widgets.dart';
+import 'package:puzzzi/widgets/game/material/level_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GamePresenterWidget extends StatefulWidget {
@@ -54,6 +55,8 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
   int? time;
 
   int? stoptime;
+
+  bool show = false;
 
   int timereq = 5;
 
@@ -150,7 +153,7 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
 
   void playStop() {
     if (isPlaying()) {
-      stop();
+      stop(true);
     } else {
       play();
     }
@@ -165,10 +168,11 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
       steps = 0;
       board =
           game.shuffle(game.hardest(board), amount: board!.size * board!.size);
+      show = false;
     });
   }
 
-  void stop() {
+  void stop(bool? p) {
     final now = DateTime.now().millisecondsSinceEpoch;
 
     final result = Result(
@@ -176,7 +180,10 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
       time: now - time!,
       size: board!.size,
     );
-    widget.onEnd?.call(result);
+    if (p!) {
+      widget.onEnd?.call(result);
+    }
+
     setState(() {
       time = TIME_STOPPED;
       steps = 0;
@@ -215,8 +222,14 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
           );
 
           widget.onSolve?.call(result);
+          // GameLevelMaterialPage().
 
-          stop();
+          setState(() {
+            show = true;
+            // GameLevelMaterialPage().show = false;
+          });
+
+          stop(false);
         }
       }
     });

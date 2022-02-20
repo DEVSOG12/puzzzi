@@ -25,9 +25,11 @@ class Intro extends StatelessWidget {
       child: rootWidget,
       onSolve: (result) {
         // _submitResult(context, result);
-        _showVictoryDialog(context, result);
+
+        _showVictoryDialog(context, result, mode!);
       },
       onEnd: (result) {
+        // if()
         _showEndDialog(context, result);
       },
     );
@@ -45,10 +47,11 @@ class Intro extends StatelessWidget {
     }
   }
 
-  void _showVictoryDialog(BuildContext context, Result result) {
+  void _showVictoryDialog(BuildContext context, Result result, bool mode) {
     showDialog(
       context: context,
       builder: (context) => GameVictoryDialog(
+        mode: mode,
         result: result,
         islogged: islogged,
       ),
@@ -100,11 +103,11 @@ class _GamePageState extends State<GamePage> {
                 label: label,
                 child: InkWell(
                   onTap: () {
-                (!islogged! && mode == 1)
+                    (!islogged! && mode == 1)
                         ? Fluttertoast.showToast(
                             msg: "Please sign in to use the Level Mode",
                             timeInSecForIosWeb: 5)
-                        : Navigator.push(
+                        : Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (_) => Intro(
@@ -157,11 +160,17 @@ class _GamePageState extends State<GamePage> {
       TextButton(
         child: const Text("Close"),
         onPressed: () {
-          Navigator.of(context).pop();
+          // Navigator.of(context).pop();
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (_) =>
+                      Intro(islogged: widget.islogged, mode: true)));
         },
       ),
     ];
     showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (_) {
           return Expanded(
@@ -178,27 +187,29 @@ class _GamePageState extends State<GamePage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Center(
-                      child: Row(
-                        children: [
-                          createBoard(
-                            size: 3,
-                            islogged: widget.islogged,
-                            context: context,
-                            mode: 0,
-                            label: "Free Mode",
-                          ),
-                          SizedBox(
-                            width: 30,
-                          ),
-                          createBoard(
-                            size: 3,
-                            context: context,
-                            islogged: widget.islogged,
-                            mode: 1,
-                            label: "Level Mode",
-                          )
-                        ],
+                    FittedBox(
+                      child: Center(
+                        child: Row(
+                          children: [
+                            createBoard(
+                              size: 3,
+                              islogged: widget.islogged,
+                              context: context,
+                              mode: 0,
+                              label: "Free Mode",
+                            ),
+                            SizedBox(
+                              width: 30,
+                            ),
+                            createBoard(
+                              size: 3,
+                              context: context,
+                              islogged: widget.islogged,
+                              mode: 1,
+                              label: "Level Mode",
+                            )
+                          ],
+                        ),
                       ),
                     )
                   ],
