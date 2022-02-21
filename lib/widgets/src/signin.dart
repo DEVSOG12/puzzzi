@@ -105,39 +105,67 @@ class _SignInPageState extends State<SignInPage> {
   Widget _submitButton() {
     return isloading
         ? const CircularProgressIndicator()
-        : component2(
-            'LOGIN',
-            2.58,
-            () async {
-              HapticFeedback.lightImpact();
-              setState(() {
-                isloading = true;
-              });
-              dynamic user = await AuthService().login(
-                  email: emailcontroller.text,
-                  password: passwordcontroller.text);
+        : Align(
+            alignment: Alignment.centerRight,
+            child: InkWell(
+              onTap: () async {
+                HapticFeedback.lightImpact();
+                setState(() {
+                  isloading = true;
+                });
+                dynamic user = await AuthService().login(
+                    email: emailcontroller.text,
+                    password: passwordcontroller.text);
 
-              if (user is UserCredential) {
-                if (user.user != null) {
+                if (user is UserCredential) {
+                  if (user.user != null) {
+                    setState(() {
+                      isloading = false;
+                    });
+                    log(user.toString());
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const GamePage(islogged: true)));
+                  }
+                }
+                if (user is! UserCredential) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Error: " +
+                          user
+                              .toString()
+                              .substring(120, user.toString().length - 1))));
+                  log("Error");
                   setState(() {
                     isloading = false;
                   });
-                  log(user.toString());
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => const GamePage(islogged: true)));
                 }
-              }
-              if (user is! UserCredential) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Error: " + user.toString())));
-                log("Error");
-                setState(() {
-                  isloading = false;
-                });
-              }
-            },
+              },
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      '',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 25,
+                          fontWeight: FontWeight.w500,
+                          height: 1.6),
+                    ),
+                    SizedBox.fromSize(
+                      size: const Size.square(70.0), // button width and height
+                      child: ClipOval(
+                        child: Material(
+                          color: const Color.fromRGBO(76, 81, 93, 1),
+                          child: isloading
+                              ? const CircularProgressIndicator()
+                              : const Icon(Icons.arrow_forward,
+                                  color: Colors.white), // button color
+                        ),
+                      ),
+                    ),
+                  ]),
+            ),
           );
   }
 

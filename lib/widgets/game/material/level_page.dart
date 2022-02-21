@@ -134,7 +134,7 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
           if (!(presenter.isPlaying() && (orientation == Orientation.portrait)))
             StreamBuilder(
                 stream: FirebaseFirestore.instance
-                    .collection("users")
+                    .collection("users")  
                     .doc(user!.uid)
                     .snapshots(),
                 builder: (context, snapshot) {

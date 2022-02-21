@@ -191,8 +191,10 @@ class _SignUpPageState extends State<SignUpPage> {
                 if (widget.function != null) {
                   widget.function;
                 }
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const GamePage(islogged: true)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const GamePage(islogged: true)));
               }
             }
             if (user! is! UserCredential) {
@@ -285,16 +287,23 @@ class _SignUpPageState extends State<SignUpPage> {
                         const SizedBox(height: 20),
                         _passwordWidget(),
                         const SizedBox(height: 80),
-                        _submitButton(),
-                        SizedBox(height: height * .050),
-                        _createLoginLabel(),
+                        Row(
+                          children: [
+                            _createLoginLabel(),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width - 150,
+                            ),
+                            _submitButton(),
+                          ],
+                        ),
+                        // SizedBox(height: height * .050),
                       ],
                     ),
                   ),
                 ],
               ),
             ),
-            Positioned(top: 60, left: 0, child: _backButton()),
+            Positioned(top: 30, left: 0, child: _backButton()),
           ],
         ),
       ),

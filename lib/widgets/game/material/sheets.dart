@@ -4,6 +4,7 @@
 import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:puzzzi/config/ui.dart';
 import 'package:puzzzi/data/board.dart';
 // import 'package:puzzzi/utils/platform.dart';
@@ -111,13 +112,19 @@ Widget createMoreBottomSheet(
                     const BorderRadius.all(const Radius.circular(16.0)),
               ),
               onPressed: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => Intro(
-                            islogged: FirebaseAuth.instance.currentUser != null,
-                            mode: !mode)));
-                mode = !mode;
+                if (!mode && FirebaseAuth.instance.currentUser == null) {
+                  Fluttertoast.showToast(
+                      msg: "You cannot change mode except you are logged in");
+                } else {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => Intro(
+                              islogged:
+                                  FirebaseAuth.instance.currentUser != null,
+                              mode: !mode)));
+                  mode = !mode;
+                }
               },
               child: Text(mode ? "Level Mode" : "Free Mode"),
             ),
