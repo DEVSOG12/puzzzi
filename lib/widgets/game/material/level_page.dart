@@ -2,10 +2,12 @@ import 'dart:developer' as dev;
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:confetti/confetti.dart';
 import 'package:puzzzi/config/ui.dart';
 import 'package:puzzzi/widgets/auto_size_text.dart';
 import 'package:puzzzi/widgets/game/board.dart';
 import 'package:puzzzi/widgets/game/material/control.dart';
+import 'package:puzzzi/widgets/game/material/display.dart';
 import 'package:puzzzi/widgets/game/material/lead.dart';
 // import 'package:puzzzi/widgets/game/material/leaderboard.dart';
 import 'package:puzzzi/widgets/game/material/sheets.dart';
@@ -44,8 +46,25 @@ class GameLevelMaterialPage extends StatefulWidget {
 }
 
 class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
-  final FocusNode _boardFocus = FocusNode();
+  ConfettiController? controllerTopCenter;
 
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      initController();
+    });
+  }
+
+  void initController() {
+    controllerTopCenter =
+        ConfettiController(duration: const Duration(seconds: 1));
+  }
+
+  final FocusNode _boardFocus = FocusNode();
+  int? levels;
+
+  bool? mode;
   @override
   Widget build(BuildContext context) {
     // GamePresenterWidget.of(context).timereq = 5;
@@ -65,6 +84,24 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
     final isLargeScreen = screenWidth > 400;
 
     final fabWidget = _buildFab(context);
+    Align buildConfettiWidget(controller, double blastDirection) {
+      return Align(
+        alignment: Alignment.topCenter,
+        child: ConfettiWidget(
+          maximumSize: Size(30, 30),
+          shouldLoop: false,
+          confettiController: controller,
+          blastDirection: blastDirection,
+          blastDirectionality: BlastDirectionality.directional,
+          maxBlastForce: 20, // set a lower max blast force
+          minBlastForce: 8, // set a lower min blast force
+          emissionFrequency: 1,
+          // minBlastForce: 8, // a lot of particles at once
+          gravity: 1,
+        ),
+      );
+    }
+
     final boardWidget = _buildBoard(context);
 
     return OrientationBuilder(builder: (context, orientation) {
@@ -82,6 +119,9 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                     .doc(user.uid)
                     .snapshots(),
                 builder: (context, snapshot) {
+                  // print(
+
+                  // );
                   if (snapshot.hasData) {
                     DocumentSnapshot snapshots =
                         snapshot.data as DocumentSnapshot;
@@ -89,6 +129,8 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                         snapshots.data() as Map<String, dynamic>?;
                     // Map data = snapshots.data()! as Map;
                     level = snap!["level"];
+
+                    levels = snap["level"];
 
                     return Column(
                       children: [
@@ -112,16 +154,25 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                 });
                 presenter.stop(false);
               },
-              secondsRemaining: (presenter.board!.size * 2) - 2 * (level % 2),
-              time: (presenter.board!.size * 2) - 2 * (level % 2),
+              secondsRemaining:
+                  (presenter.board!.size * 2) - (pow(level * 2, 0.2)).round(),
+
+              time: pow(level * 2, 0.4).round().isNegative
+                  ? ((presenter.board!.size * 2) - pow(level * 2, 0.4).round())
+                          .isNegative
+                      ? 0
+                      : 1
+                  : (presenter.board!.size * 2) - pow(level * 2, 0.4).round(),
+
+              // : (presenter.board!.size * 2) - 2 * (level % 2),
               // time: (presenter.board!.size * 3) - level % 2,
               // time: 1,
               fontSize: orientation == Orientation.landscape && !isLargeScreen
                   ? 56
-                  : (presenter.isPlaying() &&
-                          (orientation == Orientation.portrait))
-                      ? 30
-                      : 72.0,
+                  // : (presenter.isPlaying() &&
+                  //         (orientation == Orientation.portrait))
+                  //     ? 30
+                  : 72.0,
             ),
           ),
           GameStepsWidget(
@@ -134,7 +185,7 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
           if (!(presenter.isPlaying() && (orientation == Orientation.portrait)))
             StreamBuilder(
                 stream: FirebaseFirestore.instance
-                    .collection("users")  
+                    .collection("users")
                     .doc(user!.uid)
                     .snapshots(),
                 builder: (context, snapshot) {
@@ -144,19 +195,18 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                     Map<String, dynamic>? snap =
                         snapshots.data() as Map<String, dynamic>?;
                     // Map data = snapshots.data()! as Map;
+                    // FirebaseFirestore.instance
+                    //     .collection("users")
+                    //     .doc(user.uid)
+                    //     .update({
+                    //   "level": snap!["level"] + 1,
+                    //   "xp": snap["max_xp"] < snap["xp"]
+                    //       ? snap["xp"] - snap["max_xp"]
+                    //       : 0,
+                    //   "max_xp": (snap["level"] + 1) * 250
+                    // });
 
-                    if (snap!["max_xp"] <= snap["xp"]) {
-                      FirebaseFirestore.instance
-                          .collection("users")
-                          .doc(user.uid)
-                          .update({
-                        "level": snap["level"] + 1,
-                        "xp": 0,
-                        "max_xp": (snap["level"] + 1) * 250
-                      });
-                    }
-
-                    if (((snap["level"] % 10) == 0) && (snap["xp"] == 0)) {
+                    if (((snap!["level"] % 10) == 0) && (snap["xp"] <= 100)) {
                       FirebaseFirestore.instance
                           .collection("users")
                           .doc(user.uid)
@@ -166,19 +216,84 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                         // "max_xp": (snap["level"] + 1) * 250
                       });
                     }
+                    if (snap["max_xp"] <= snap["xp"]) {
+                      controllerTopCenter!.play();
+                      WidgetsBinding.instance!.addPostFrameCallback((_) {
+                        showDialog(
+                            context: context,
+                            builder: (_) {
+                              return AlertDialog(
+                                  title: Center(
+                                    child: Text(
+                                      "Congratulations!",
+                                      style:
+                                          Theme.of(context).textTheme.headline5,
+                                    ),
+                                  ),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Text(
+                                        "You have Leveled up! ",
+                                        style: const TextStyle(
+                                            fontSize: 30, color: Colors.blue),
+                                      ),
+                                      Text(
+                                        "You are in Level ${(snap["level"] + 1).toString()}",
+                                        // const SizedBox(height: 16),
+                                      ),
+                                      if ((snap["level"] + 1) % 10 == 0 &&
+                                          (snap["xp"] <= 100))
+                                        Text(
+                                            "You have earn ${(snap["level"] * 10) - snap["level"]} points"),
+                                      if ([30, 50, 70, 90]
+                                          .contains((snap["level"] as int)))
+                                        Text(
+                                            "You have also unlocked a new Board!")
+                                    ],
+
+                                    // actions: actions,
+                                  ));
+                            });
+
+                        // Add Your Code here.
+                      });
+
+                      FirebaseFirestore.instance
+                          .collection("users")
+                          .doc(user.uid)
+                          .update({
+                        "level": snap["level"] + 1,
+                        "xp": snap["max_xp"] < snap["xp"]
+                            ? snap["xp"] - snap["max_xp"]
+                            : 0,
+                        "max_xp": (snap["level"] + 1) * 250
+                      });
+                    }
+
                     return Column(
                       children: [
-                        FAProgressBar(
-                          animatedDuration: const Duration(seconds: 2),
-                          progressColor: Colors.primaries[snap["level"] % 10],
-                          displayText: "${snap["xp"]} XP/ ${snap["max_xp"]} XP",
-                          displayTextStyle: TextStyle(
-                            color: Colors.black,
+                        // SizedBox(
+                        //   width: MediaQuery.of(context).size.width / 6,
+                        // ),
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: FAProgressBar(
+                            animatedDuration: const Duration(seconds: 2),
+                            progressColor: Colors.primaries[snap["level"] % 10],
+                            displayText:
+                                "${snap["xp"]} XP/ ${snap["max_xp"]} XP",
+                            displayTextStyle: TextStyle(
+                              color: Colors.black,
+                            ),
+                            currentValue:
+                                ((snap["xp"] / snap["max_xp"]) * 100 as double)
+                                    .round(),
                           ),
-                          currentValue:
-                              ((snap["xp"] / snap["max_xp"]) * 100 as double)
-                                  .round(),
-                        )
+                        ),
+                        // SizedBox(
+                        //   width: MediaQuery.of(context).size.width / 12,
+                        // ),
                       ],
                     );
                   }
@@ -202,7 +317,7 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                   Row(
                     children: [
                       Text(
-                        "Howdy, ${user!.displayName} ",
+                        " Howdy,${user!.displayName} ",
                         style:
                             const TextStyle(color: Colors.blue, fontSize: 29),
                       ),
@@ -228,7 +343,20 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              const AppIcon(size: 24.0),
+                              GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (_) => DisplayDialog(
+                                            pres: presenter,
+                                            level: levels,
+                                          ));
+                                },
+                                child: AppIcon(
+                                  size: 24.0,
+                                  bsize: presenter.board!.size,
+                                ),
+                              ),
                               const SizedBox(width: 16.0),
                               Text(
                                 'Puzzzi',
@@ -240,10 +368,14 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                       )
                     : const SizedBox(height: 0),
                 const SizedBox(height: 32.0),
+                buildConfettiWidget(controllerTopCenter, pi / 1),
+                buildConfettiWidget(controllerTopCenter, pi / 4),
                 Center(
                   child: statusWidget,
                 ),
                 const SizedBox(height: 16.0),
+                buildConfettiWidget(controllerTopCenter, pi / 1),
+                buildConfettiWidget(controllerTopCenter, pi / 4),
                 Expanded(
                   child: Align(
                     alignment: Alignment.bottomCenter,
@@ -253,6 +385,8 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                 isLargeScreen && isTallScreen
                     ? const SizedBox(height: 116.0)
                     : const SizedBox(height: 72.0),
+                buildConfettiWidget(controllerTopCenter, pi / 1),
+                buildConfettiWidget(controllerTopCenter, pi / 4),
               ],
             ),
           ),
@@ -274,7 +408,7 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                   Row(
                     children: [
                       Text(
-                        "Howdy, ${user!.displayName} ",
+                        " Howdy,${user!.displayName} ",
                         style: TextStyle(color: Colors.blue, fontSize: 29),
                       ),
                     ],
@@ -311,6 +445,8 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                     ),
                   ],
                 ),
+                buildConfettiWidget(controllerTopCenter, pi / 1),
+                buildConfettiWidget(controllerTopCenter, pi / 4),
               ],
             ),
           ),
@@ -398,6 +534,8 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                 presenter.tap(point: tapPoint);
               },
               child: BoardWidget(
+                level: levels,
+                mode: true,
                 isSpeedRunModeEnabled: config.isSpeedRunModeEnabled,
                 board: presenter.board,
                 size: puzzleSize,

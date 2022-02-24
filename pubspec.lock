@@ -92,6 +92,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.0"
+  confetti:
+    dependency: "direct main"
+    description:
+      name: confetti
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.0"
   convert:
     dependency: transitive
     description:
@@ -205,10 +212,12 @@ packages:
   flutter_animation_progress_bar:
     dependency: "direct main"
     description:
-      name: flutter_animation_progress_bar
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.1"
+      path: "."
+      ref: HEAD
+      resolved-ref: "6efc557662342c3cc553f2f784de40e3e504d0ce"
+      url: "git://github.com/DEVSOG12/Flutter-Animation-Progress-Bar.git"
+    source: git
+    version: "2.0.0"
   flutter_lints:
     dependency: "direct dev"
     description:

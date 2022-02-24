@@ -29,9 +29,10 @@ class _SignInPageState extends State<SignInPage> {
         SizedBox(
           width: MediaQuery.of(context).size.width / 2,
           child: TextFormField(
-            keyboardType: TextInputType.name,
-            controller: emailcontroller,
+            keyboardType: TextInputType.emailAddress,
+            autofillHints: const [AutofillHints.email],
             textInputAction: TextInputAction.next,
+            controller: emailcontroller,
             decoration: const InputDecoration(
               labelText: 'Email',
               labelStyle: TextStyle(
@@ -83,6 +84,8 @@ class _SignInPageState extends State<SignInPage> {
           child: TextFormField(
             controller: passwordcontroller,
             obscureText: true,
+            autofillHints: const [AutofillHints.password],
+            onEditingComplete: () => TextInput.finishAutofillContext(),
             keyboardType: TextInputType.name,
             textInputAction: TextInputAction.next,
             decoration: const InputDecoration(
@@ -103,70 +106,66 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Widget _submitButton() {
-    return isloading
-        ? const CircularProgressIndicator()
-        : Align(
-            alignment: Alignment.centerRight,
-            child: InkWell(
-              onTap: () async {
-                HapticFeedback.lightImpact();
-                setState(() {
-                  isloading = true;
-                });
-                dynamic user = await AuthService().login(
-                    email: emailcontroller.text,
-                    password: passwordcontroller.text);
+    return Align(
+      alignment: Alignment.centerRight,
+      child: InkWell(
+        onTap: () async {
+          HapticFeedback.lightImpact();
+          setState(() {
+            isloading = true;
+          });
+          dynamic user = await AuthService().login(
+              email: emailcontroller.text, password: passwordcontroller.text);
 
-                if (user is UserCredential) {
-                  if (user.user != null) {
-                    setState(() {
-                      isloading = false;
-                    });
-                    log(user.toString());
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const GamePage(islogged: true)));
-                  }
-                }
-                if (user is! UserCredential) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("Error: " +
-                          user
-                              .toString()
-                              .substring(120, user.toString().length - 1))));
-                  log("Error");
-                  setState(() {
-                    isloading = false;
-                  });
-                }
-              },
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      '',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25,
-                          fontWeight: FontWeight.w500,
-                          height: 1.6),
-                    ),
-                    SizedBox.fromSize(
-                      size: const Size.square(70.0), // button width and height
-                      child: ClipOval(
-                        child: Material(
-                          color: const Color.fromRGBO(76, 81, 93, 1),
-                          child: isloading
-                              ? const CircularProgressIndicator()
-                              : const Icon(Icons.arrow_forward,
-                                  color: Colors.white), // button color
-                        ),
-                      ),
-                    ),
-                  ]),
+          if (user is UserCredential) {
+            if (user.user != null) {
+              setState(() {
+                isloading = false;
+              });
+              log(user.toString());
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => const GamePage(islogged: true)));
+            }
+          }
+          if (user is! UserCredential) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("Error: " +
+                    user
+                        .toString()
+                        .substring(120, user.toString().length - 1))));
+            log("Error");
+            setState(() {
+              isloading = false;
+            });
+          }
+        },
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          const Text(
+            '',
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 25,
+                fontWeight: FontWeight.w500,
+                height: 1.6),
+          ),
+          SizedBox.fromSize(
+            size: const Size.square(70.0), // button width and height
+            child: ClipOval(
+              child: Material(
+                color: const Color.fromRGBO(76, 81, 93, 1),
+                child: isloading
+                    ? const CircularProgressIndicator()
+                    : const Icon(Icons.arrow_forward,
+                        color: Colors.white), // button color
+              ),
             ),
-          );
+          ),
+        ]),
+      ),
+    );
   }
 
   Widget _createAccountLabel() {
@@ -232,17 +231,19 @@ class _SignInPageState extends State<SignInPage> {
                 children: <Widget>[
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      children: [
-                        SizedBox(height: height * .55),
-                        _usernameWidget(),
-                        const SizedBox(height: 20),
-                        _passwordWidget(),
-                        const SizedBox(height: 30),
-                        _submitButton(),
-                        SizedBox(height: height * .050),
-                        _createAccountLabel(),
-                      ],
+                    child: AutofillGroup(
+                      child: Column(
+                        children: [
+                          SizedBox(height: height * .55),
+                          _usernameWidget(),
+                          const SizedBox(height: 20),
+                          _passwordWidget(),
+                          const SizedBox(height: 30),
+                          _submitButton(),
+                          SizedBox(height: height * .050),
+                          _createAccountLabel(),
+                        ],
+                      ),
                     ),
                   ),
                 ],

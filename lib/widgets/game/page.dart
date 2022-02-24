@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:puzzzi/data/result.dart';
 import 'package:puzzzi/widgets/game/material/end.dart';
@@ -164,8 +165,9 @@ class _GamePageState extends State<GamePage> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (_) =>
-                      Intro(islogged: widget.islogged, mode: true)));
+                  builder: (_) => Intro(
+                      islogged: FirebaseAuth.instance.currentUser != null,
+                      mode: true)));
         },
       ),
     ];
@@ -192,7 +194,7 @@ class _GamePageState extends State<GamePage> {
                         children: [
                           createBoard(
                             size: 3,
-                            islogged: widget.islogged,
+                            islogged: FirebaseAuth.instance.currentUser != null,
                             context: context,
                             mode: 0,
                             label: "Free Mode",
@@ -203,7 +205,7 @@ class _GamePageState extends State<GamePage> {
                           createBoard(
                             size: 3,
                             context: context,
-                            islogged: widget.islogged,
+                            islogged: FirebaseAuth.instance.currentUser != null,
                             mode: 1,
                             label: "Level Mode",
                           )

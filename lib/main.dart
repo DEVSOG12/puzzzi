@@ -21,6 +21,8 @@ import 'package:puzzzi/widgets/src/signup.dart';
 // import 'package:in_app_purchase/in_app_purchase.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Add this
+
   FirebaseApp defaultApp = await Firebase.initializeApp();
   log(defaultApp.name);
   _setTargetPlatformForDesktop();

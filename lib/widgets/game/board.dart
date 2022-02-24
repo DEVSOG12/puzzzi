@@ -14,6 +14,10 @@ class BoardWidget extends StatefulWidget {
 
   final bool showNumbers;
 
+  final bool? mode;
+
+  final int? level;
+
   final Function(Point<int>)? onTap;
 
   final bool? isSpeedRunModeEnabled;
@@ -23,6 +27,8 @@ class BoardWidget extends StatefulWidget {
     required this.board,
     required this.size,
     this.showNumbers = true,
+    this.mode,
+    this.level,
     this.isSpeedRunModeEnabled = false,
     this.onTap,
   }) : super(key: key);
@@ -519,6 +525,8 @@ class _BoardWidgetState extends State<BoardWidget>
       chip: (chipSize) => ChipWidget(
         // board.size
         widget.showNumbers ? "${chip.number! + 1}" : null,
+        widget.mode!,
+        widget.level ?? 0,
         overlayColor,
         backgroundColor,
         chipSize / 3,

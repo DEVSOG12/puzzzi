@@ -52,6 +52,8 @@ class _SignUpPageState extends State<SignUpPage> {
             keyboardType: TextInputType.name,
             textInputAction: TextInputAction.next,
             controller: username,
+                    autofillHints: const [AutofillHints.name],
+
             decoration: const InputDecoration(
               // hintText: 'Enter your full name',
               labelText: 'Username',
@@ -78,8 +80,10 @@ class _SignUpPageState extends State<SignUpPage> {
           width: MediaQuery.of(context).size.width / 2,
           child: TextFormField(
             controller: emailcontroller,
-            keyboardType: TextInputType.name,
+            keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
+             autofillHints: const [AutofillHints.email],
+   
             decoration: const InputDecoration(
               // hintText: 'Enter your full name',
               labelText: 'Email',
@@ -105,6 +109,9 @@ class _SignUpPageState extends State<SignUpPage> {
         SizedBox(
           width: MediaQuery.of(context).size.width / 2,
           child: TextFormField(
+             autofillHints: const [AutofillHints.password],
+        onEditingComplete: () =>
+          TextInput.finishAutofillContext(),
             controller: passwordcontroller,
             obscureText: true,
             keyboardType: TextInputType.name,
@@ -278,26 +285,28 @@ class _SignUpPageState extends State<SignUpPage> {
                 children: <Widget>[
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      children: [
-                        SizedBox(height: height * .4),
-                        _nameWidget(),
-                        const SizedBox(height: 20),
-                        _emailWidget(),
-                        const SizedBox(height: 20),
-                        _passwordWidget(),
-                        const SizedBox(height: 80),
-                        Row(
-                          children: [
-                            _createLoginLabel(),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width - 150,
-                            ),
-                            _submitButton(),
-                          ],
-                        ),
-                        // SizedBox(height: height * .050),
-                      ],
+                    child: AutofillGroup(
+                      child: Column(
+                        children: [
+                          SizedBox(height: height * .4),
+                          _nameWidget(),
+                          const SizedBox(height: 20),
+                          _emailWidget(),
+                          const SizedBox(height: 20),
+                          _passwordWidget(),
+                          const SizedBox(height: 80),
+                          Row(
+                            children: [
+                              _createLoginLabel(),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width - 150,
+                              ),
+                              _submitButton(),
+                            ],
+                          ),
+                          // SizedBox(height: height * .050),
+                        ],
+                      ),
                     ),
                   ),
                 ],

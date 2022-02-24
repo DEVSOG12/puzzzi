@@ -23,11 +23,13 @@ dependencies:
   package_info: ^2.0.2
   firebase_core:
   flutter_animation_progress_bar:
+    git: git://github.com/DEVSOG12/Flutter-Animation-Progress-Bar.git
   proste_bezier_curve:
   cloud_firestore:
   
   firebase_auth: ^3.3.4
   firedart: ^0.9.0+1
+  confetti: ^0.6.0
 
 dev_dependencies:
   flutter_test:
@@ -47,7 +49,19 @@ flutter:
    - assets/mode/
    - assets/2/4x4/
    - assets/2/3x3/
-  
+   - assets/3/5x5/
+   - assets/3/4x4/
+   - assets/3/3x3/ 
+   - assets/4/5x5/
+   - assets/4/4x4/
+   - assets/4/3x3/
+   - assets/5/5x5/
+   - assets/5/4x4/
+   - assets/5/3x3/  
+   - assets/6/5x5/
+   - assets/6/4x4/
+   - assets/6/3x3/  
+
   fonts:
     - family: Inconsolata
       fonts:

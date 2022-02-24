@@ -5,7 +5,6 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-
 class LeaderBoard extends StatefulWidget {
   const LeaderBoard({Key? key}) : super(key: key);
 
@@ -19,16 +18,23 @@ class _LeaderBoardState extends State<LeaderBoard> {
     return Scaffold(
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection("leaderboard")
+            .collection("users")
+            .orderBy("level", descending: true)
+            .orderBy("xp", descending: true)
             .limit(10)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             QuerySnapshot querySnapshot = snapshot.data as QuerySnapshot;
-            querySnapshot.docs.sort((a, b) {
-              return ((b.data() as Map)["point"])
-                  .compareTo(((a.data() as Map)["point"]));
-            });
+            // log(((querySnapshot.docs.first.data()! as Map)["level"] ?? 0)
+            //     .toString());
+
+            // querySnapshot.docs.sort((a, b) {
+            //   return ((b.data() as Map)["level"] ?? 0)
+            //       .compareTo(((a.data() as Map)["level"]) ?? 0);
+            // });
+            // log(((querySnapshot.docs.first.data()! as Map)["level"] ?? 0)
+            //     .toString());
             // querySnapshot.docs.;
 
             // log(querySnapshot.docs[]);5
@@ -37,9 +43,9 @@ class _LeaderBoardState extends State<LeaderBoard> {
             return ListView.builder(
                 itemCount: querySnapshot.docs.length,
                 itemBuilder: (_, i) {
-                  // log(querySnapshot.docs[i].toString());
+                  // log(querySnapshot.docs[i];
 
-                  log(querySnapshot.docs.toString());
+                  // log(querySnapshot.docs.toString());
 
                   Map documentSnapshot = querySnapshot.docs[i].data() as Map;
                   return ListTile(
@@ -47,10 +53,10 @@ class _LeaderBoardState extends State<LeaderBoard> {
                       backgroundColor: Colors.primaries[i],
                       child: Text("#${i + 1}"),
                     ),
-                    title: Text(documentSnapshot["name"]),
+                    title: Text(documentSnapshot["username"]),
                     subtitle:
-                        Text(documentSnapshot["point"].toString() + " Points"),
-                    trailing: Text(documentSnapshot["time_taken"]),
+                        Text("Level " + documentSnapshot["level"].toString()),
+                    trailing: Text(documentSnapshot["xp"].toString()),
                   );
                 });
           } else {

@@ -57,6 +57,8 @@ Widget createMoreBottomSheet(
                       return Semantics(
                         excludeSemantics: true,
                         child: BoardWidget(
+                          mode: false,
+                          level: 0,
                           board: Board.createNormal(size!),
                           onTap: null,
                           showNumbers: false,
@@ -164,9 +166,12 @@ Widget createMoreBottomSheet(
       ],
     ),
     const SizedBox(height: 4),
-    Text(
-      "What size do you want to play?",
-      style: TextStyle(fontSize: 28),
+    Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Text(
+        "What size do you want to play?",
+        style: TextStyle(fontSize: 28),
+      ),
     ),
     const SizedBox(height: 4),
     Row(

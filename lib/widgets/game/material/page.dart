@@ -82,7 +82,7 @@ class GameMaterialPage extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Howdy, ${user!.displayName} ",
+                        " Howdy, ${user!.displayName} ",
                         style:
                             const TextStyle(color: Colors.blue, fontSize: 29),
                       ),
@@ -108,7 +108,7 @@ class GameMaterialPage extends StatelessWidget {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              const AppIcon(size: 24.0),
+                              AppIcon(size: 24.0, bsize: presenter.board!.size),
                               const SizedBox(width: 16.0),
                               Text(
                                 'Puzzzi',
@@ -119,7 +119,11 @@ class GameMaterialPage extends StatelessWidget {
                         ),
                       )
                     : const SizedBox(height: 0),
-                const SizedBox(height: 32.0),
+                Center(
+                    child: Text(
+                  "Practice Mode",
+                  style: TextStyle(fontSize: 21),
+                )),
                 Center(
                   child: statusWidget,
                 ),
@@ -154,7 +158,7 @@ class GameMaterialPage extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Howdy, ${user!.displayName} ",
+                        " Howdy,${user!.displayName} ",
                         style: TextStyle(color: Colors.blue, fontSize: 29),
                       ),
                     ],
@@ -275,6 +279,7 @@ class GameMaterialPage extends StatelessWidget {
                 presenter.tap(point: tapPoint);
               },
               child: BoardWidget(
+                mode: false,
                 isSpeedRunModeEnabled: config.isSpeedRunModeEnabled,
                 board: presenter.board,
                 size: puzzleSize,

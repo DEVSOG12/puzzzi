@@ -13,6 +13,10 @@ class ChipWidget extends StatelessWidget {
 
   final int mich;
 
+  final bool mode;
+
+  final int level;
+
   final Color overlayColor;
 
   final Color backgroundColor;
@@ -23,6 +27,8 @@ class ChipWidget extends StatelessWidget {
 
   const ChipWidget(
     this.text,
+    this.mode,
+    this.level,
     this.overlayColor,
     this.backgroundColor,
     this.fontSize, {
@@ -71,13 +77,55 @@ class ChipWidget extends StatelessWidget {
 
     String? assets() {
       if (boardsize == 3) {
-        return "assets/${(mich + 1).toString()}/3x3/${images3x3[(int.parse(text!) - 1)]}.png";
+        if (mode ) {
+          if (level >= 30 && level <= 50) {
+            return "assets/3/3x3/${images3x3[(int.parse(text!) - 1)]}.png";
+          } else if (level >= 50 && level <= 70) {
+            return "assets/4/3x3/${images3x3[(int.parse(text!) - 1)]}.png";
+          } else if (level >= 70 && level <= 90) {
+            return "assets/5/3x3/${images3x3[(int.parse(text!) - 1)]}.png";
+          } else if (level >= 90) {
+            return "assets/6/3x3/${images3x3[(int.parse(text!) - 1)]}.png";
+          } else {
+            return "assets/${(mich + 1).toString()}/3x3/${images3x3[(int.parse(text!) - 1)]}.png";
+          }
+        } else {
+          return "assets/${(mich + 1).toString()}/3x3/${images3x3[(int.parse(text!) - 1)]}.png";
+        }
       }
       if (boardsize == 4) {
-        return "assets/${(mich + 1).toString()}/4x4/${images4x4[(int.parse(text!) - 1)]}.png";
+        if (mode) {
+          if (level >= 30 && level <= 50) {
+            return "assets/3/4x4/${images4x4[(int.parse(text!) - 1)]}.png";
+          } else if (level >= 50 && level <= 70) {
+            return "assets/4/4x4/${images4x4[(int.parse(text!) - 1)]}.png";
+          } else if (level >= 70 && level <= 90) {
+            return "assets/5/4x4/${images4x4[(int.parse(text!) - 1)]}.png";
+          } else if (level >= 90) {
+            return "assets/6/4x4/${images4x4[(int.parse(text!) - 1)]}.png";
+          } else {
+            return "assets/${(mich + 1).toString()}/4x4/${images4x4[(int.parse(text!) - 1)]}.png";
+          }
+        } else {
+          return "assets/${(mich + 1).toString()}/4x4/${images4x4[(int.parse(text!) - 1)]}.png";
+        }
       }
       if (boardsize == 5) {
-        return "assets/${(mich + 1).toString()}/5x5/${images5x5[(int.parse(text!) - 1)]}.png";
+        if (mode) {
+          if (level >= 30 && level <= 50) {
+            return "assets/3/5x5/${images5x5[(int.parse(text!) - 1)]}.png";
+          } else if (level >= 50 && level <= 70) {
+            return "assets/4/5x5/${images5x5[(int.parse(text!) - 1)]}.png";
+          } else if (level >= 70 && level <= 90) {
+            return "assets/5/5x5/${images5x5[(int.parse(text!) - 1)]}.png";
+          } else if (level >= 90) {
+            return "assets/6/5x5/${images5x5[(int.parse(text!) - 1)]}.png";
+          } else {
+            return "assets/${(mich + 1).toString()}/5x5/${images5x5[(int.parse(text!) - 1)]}.png";
+          }
+        } else {
+          return "assets/${(mich + 1).toString()}/5x5/${images5x5[(int.parse(text!) - 1)]}.png";
+        }
       }
     }
 
