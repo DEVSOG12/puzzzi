@@ -3,7 +3,9 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:puzzzi/widgets/src/signup.dart';
 
 class LeaderBoard extends StatefulWidget {
   const LeaderBoard({Key? key}) : super(key: key);
@@ -56,10 +58,19 @@ class _LeaderBoardState extends State<LeaderBoard> {
                     title: Text(documentSnapshot["username"]),
                     subtitle:
                         Text("Level " + documentSnapshot["level"].toString()),
-                    trailing: Text(documentSnapshot["xp"].toString()),
+                    trailing: Text(documentSnapshot["xp"].toString() + " XP"),
                   );
                 });
           } else {
+            if (FirebaseAuth.instance.currentUser == null) {
+              return GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => SignUpPage()));
+                  },
+                  child: FittedBox(
+                      child: Text("Sign in to view the Leaderboard")));
+            }
             return const CircularProgressIndicator();
           }
           // return CircularProgressIndicator();

@@ -88,7 +88,7 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
       return Align(
         alignment: Alignment.topCenter,
         child: ConfettiWidget(
-          maximumSize: Size(30, 30),
+          maximumSize: const Size(30, 30),
           shouldLoop: false,
           confettiController: controller,
           blastDirection: blastDirection,
@@ -143,7 +143,7 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                     );
                   }
 
-                  return Text("Shimmer");
+                  return const Text("Shimmer");
                 }),
           Visibility(
             visible: (widget.show && !presenter.show),
@@ -233,9 +233,9 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                                   content: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
-                                      Text(
+                                      const Text(
                                         "You have Leveled up! ",
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             fontSize: 30, color: Colors.blue),
                                       ),
                                       Text(
@@ -248,7 +248,7 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                                             "You have earn ${(snap["level"] * 10) - snap["level"]} points"),
                                       if ([30, 50, 70, 90]
                                           .contains((snap["level"] as int)))
-                                        Text(
+                                        const Text(
                                             "You have also unlocked a new Board!")
                                     ],
 
@@ -278,17 +278,26 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                         // ),
                         Padding(
                           padding: const EdgeInsets.all(12.0),
-                          child: FAProgressBar(
-                            animatedDuration: const Duration(seconds: 2),
-                            progressColor: Colors.primaries[snap["level"] % 10],
-                            displayText:
+                          child: Stack(
+                            children: [
+                              Text(
                                 "${snap["xp"]} XP/ ${snap["max_xp"]} XP",
-                            displayTextStyle: TextStyle(
-                              color: Colors.black,
-                            ),
-                            currentValue:
-                                ((snap["xp"] / snap["max_xp"]) * 100 as double)
+                                style: const TextStyle(color: Colors.black),
+                              ),
+                              FAProgressBar(
+                                animatedDuration: const Duration(seconds: 2),
+                                progressColor:
+                                    Colors.primaries[snap["level"] % 10],
+                                // displayText:
+                                //     "${snap["xp"]} XP/ ${snap["max_xp"]} XP",
+                                // displayTextStyle: TextStyle(
+                                //   color: Colors.black,
+                                // ),
+                                currentValue: ((snap["xp"] / snap["max_xp"]) *
+                                        100 as double)
                                     .round(),
+                              ),
+                            ],
                           ),
                         ),
                         // SizedBox(
@@ -298,7 +307,7 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                     );
                   }
 
-                  return Text("Shimmer");
+                  return const Text("Shimmer");
                 }),
         ],
       );
@@ -326,14 +335,24 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                 if (FirebaseAuth.instance.currentUser == null)
                   Row(
                     children: [
-                      TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => SignUpPage()));
-                          },
-                          child: Text("Sign Up Now"))
+                      Container(
+                          alignment: Alignment.topLeft,
+                          child: TextButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.lightBlue),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const SignUpPage()));
+                            },
+                            child: const Text("Sign Up Now",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                )),
+                          ))
                     ],
                   ),
                 isTallScreen
@@ -409,21 +428,32 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                     children: [
                       Text(
                         " Howdy,${user!.displayName} ",
-                        style: TextStyle(color: Colors.blue, fontSize: 29),
+                        style:
+                            const TextStyle(color: Colors.blue, fontSize: 29),
                       ),
                     ],
                   ),
                 if (FirebaseAuth.instance.currentUser == null)
                   Row(
                     children: [
-                      TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => SignUpPage()));
-                          },
-                          child: Text("Sign Up Now"))
+                      Container(
+                          alignment: Alignment.topLeft,
+                          child: TextButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.lightBlue),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const SignUpPage()));
+                            },
+                            child: const Text("Sign Up Now",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                )),
+                          ))
                     ],
                   ),
                 Row(
@@ -597,7 +627,7 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
           height: 48,
           child: Material(
             elevation: 0.0,
-            color: Color(0x00000000),
+            color: const Color(0x00000000),
             // shape: const CircleBorder(),
             child: IconButton(
               tooltip: "Settings",

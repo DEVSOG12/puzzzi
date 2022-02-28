@@ -91,14 +91,24 @@ class GameMaterialPage extends StatelessWidget {
                 if (FirebaseAuth.instance.currentUser == null)
                   Row(
                     children: [
-                      TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => SignUpPage()));
-                          },
-                          child: Text("Sign Up Now"))
+                      Container(
+                          alignment: Alignment.topLeft,
+                          child: TextButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.lightBlue),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => SignUpPage()));
+                            },
+                            child: Text("Sign Up Now",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                )),
+                          ))
                     ],
                   ),
                 isTallScreen
@@ -166,14 +176,24 @@ class GameMaterialPage extends StatelessWidget {
                 if (FirebaseAuth.instance.currentUser == null)
                   Row(
                     children: [
-                      TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => SignUpPage()));
-                          },
-                          child: Text("Sign Up Now"))
+                      Container(
+                          alignment: Alignment.topLeft,
+                          child: TextButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.lightBlue),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => SignUpPage()));
+                            },
+                            child: Text("Sign Up Now",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                )),
+                          ))
                     ],
                   ),
                 Row(
