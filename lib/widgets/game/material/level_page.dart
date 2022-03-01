@@ -280,10 +280,7 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                           padding: const EdgeInsets.all(12.0),
                           child: Stack(
                             children: [
-                              Text(
-                                "${snap["xp"]} XP/ ${snap["max_xp"]} XP",
-                                style: const TextStyle(color: Colors.black),
-                              ),
+                              
                               FAProgressBar(
                                 animatedDuration: const Duration(seconds: 2),
                                 progressColor:
@@ -296,6 +293,10 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                                 currentValue: ((snap["xp"] / snap["max_xp"]) *
                                         100 as double)
                                     .round(),
+                              ),
+                              Text(
+                                "${snap["xp"]} XP/ ${snap["max_xp"]} XP",
+                                style: const TextStyle(color: Colors.black),
                               ),
                             ],
                           ),
