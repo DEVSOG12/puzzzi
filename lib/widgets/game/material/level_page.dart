@@ -58,7 +58,7 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
 
   void initController() {
     controllerTopCenter =
-        ConfettiController(duration: const Duration(seconds: 1));
+        ConfettiController(duration: const Duration(seconds: 2));
   }
 
   final FocusNode _boardFocus = FocusNode();
@@ -296,7 +296,7 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                               ),
                                 Padding(
                                                             padding: const EdgeInsets.all(12.0),
-
+child:
                               Text(
                                 "${snap["xp"]} XP/ ${snap["max_xp"]} XP",
                                 style: const TextStyle(color: Colors.black),
