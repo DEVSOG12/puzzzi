@@ -294,10 +294,14 @@ class _GameLevelMaterialPageState extends State<GameLevelMaterialPage> {
                                         100 as double)
                                     .round(),
                               ),
+                                Padding(
+                                                            padding: const EdgeInsets.all(12.0),
+
                               Text(
                                 "${snap["xp"]} XP/ ${snap["max_xp"]} XP",
                                 style: const TextStyle(color: Colors.black),
                               ),
+                                  ),
                             ],
                           ),
                         ),
